@@ -26,9 +26,9 @@ function validateOptions() {
     };
   }
 
-  if (!Number.isInteger(options.shift)) {
+  if (!Number.isInteger(options.shift) || options.shift < 0) {
     return {
-      message: 'Error: Shift parameter should be integer',
+      message: 'Error: Shift parameter should be positive integer',
       exitCode: 9
     };
   }
