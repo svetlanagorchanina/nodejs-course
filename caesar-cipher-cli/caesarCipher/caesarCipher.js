@@ -1,14 +1,18 @@
 const { ENGLISH_ALPHABET } = require('./caesarCipher.constants');
 
 function encode(str = '', shiftCount = 0, alphabet = ENGLISH_ALPHABET) {
-    const strCharacters = str.split('');
+  const strCharacters = str.split('');
 
-    return strCharacters.reduce((resultStr, character) => {
-      const encodedCharacter = getEncodedCharacter(character, shiftCount, alphabet);
-      const formattedCharacter = formatCase(character, encodedCharacter);
+  return strCharacters.reduce((resultStr, character) => {
+    const encodedCharacter = getEncodedCharacter(
+      character,
+      shiftCount,
+      alphabet
+    );
+    const formattedCharacter = formatCase(character, encodedCharacter);
 
-      return `${resultStr}${formattedCharacter}`;
-    }, '');
+    return `${resultStr}${formattedCharacter}`;
+  }, '');
 }
 
 function decode(str = '', shiftCount = 0, alphabet = ENGLISH_ALPHABET) {
@@ -19,7 +23,9 @@ function decode(str = '', shiftCount = 0, alphabet = ENGLISH_ALPHABET) {
 }
 
 function formatCase(prevCharacter, newCharacter) {
-  return prevCharacter.toUpperCase() === prevCharacter ? newCharacter.toUpperCase() : newCharacter.toLowerCase();
+  return prevCharacter.toUpperCase() === prevCharacter
+    ? newCharacter.toUpperCase()
+    : newCharacter.toLowerCase();
 }
 
 function getEncodedCharacter(character, shiftCount, alphabet) {
@@ -28,12 +34,15 @@ function getEncodedCharacter(character, shiftCount, alphabet) {
   const lastAlphabetIndex = alphabetSize - 1;
   const index = alphabetCharacters.indexOf(character.toLowerCase());
   const shiftedIndex = index + shiftCount;
-  const newIndex = shiftedIndex < lastAlphabetIndex ? shiftedIndex % lastAlphabetIndex : shiftedIndex % alphabetSize;
+  const newIndex =
+    shiftedIndex < lastAlphabetIndex
+      ? shiftedIndex % lastAlphabetIndex
+      : shiftedIndex % alphabetSize;
 
-  return !~index ? character.toLowerCase() : alphabetCharacters[newIndex];
+  return index === -1 ? character.toLowerCase() : alphabetCharacters[newIndex];
 }
 
 module.exports = {
   encode,
-  decode,
+  decode
 };
