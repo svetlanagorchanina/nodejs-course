@@ -1,11 +1,18 @@
 const uuid = require('uuid');
+const _ = require('lodash');
+
+const DEFAULT_USER = {
+  name: 'USER',
+  login: 'user',
+  password: 'P@55w0rd'
+};
 
 class User {
   constructor({
     id = uuid(),
-    name = 'USER',
-    login = 'user',
-    password = 'P@55w0rd'
+    name = DEFAULT_USER.name,
+    login = DEFAULT_USER.login,
+    password = DEFAULT_USER.password
   } = {}) {
     this.id = id;
     this.name = name;
@@ -14,8 +21,7 @@ class User {
   }
 
   static toResponse(user) {
-    const { id, name, login } = user;
-    return { id, name, login };
+    return _.pick(user, ['id', 'name', 'login']);
   }
 }
 

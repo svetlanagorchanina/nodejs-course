@@ -1,6 +1,10 @@
-const getAll = async () => {
-  // TODO: mock implementation. should be replaced during task development
-  return [];
-};
+const inversify = require('inversify');
 
-module.exports = { getAll };
+class UserMemoryRepository {
+  getAll() {
+    return [];
+  }
+}
+inversify.decorate(inversify.injectable(), UserMemoryRepository);
+
+module.exports = UserMemoryRepository;
