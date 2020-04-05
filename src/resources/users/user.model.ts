@@ -14,10 +14,10 @@ export class UserModel {
   login: string;
   password: string;
 
-  constructor(user = {}) {
+  constructor(user: User = {} as User) {
     this.id = uuid();
 
-    ['name', 'login', 'password'].forEach(property => {
+    ['name', 'login', 'password'].forEach((property: string) => {
       this[property] = user[property] || DEFAULT_USER[property];
     });
   }

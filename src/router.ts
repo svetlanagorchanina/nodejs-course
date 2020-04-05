@@ -9,3 +9,4 @@ const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
 
 router.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 router.use('/users', require('./resources/users/user.router'));
+router.use('/boards', require('./resources/board/board.router'));
