@@ -2,10 +2,11 @@ import { Board, BoardRepository } from './board.interface';
 import { injectable } from 'inversify';
 import * as _ from 'lodash';
 import { NotFoundError } from '../../error';
+import { boardsData } from '../data';
 
 @injectable()
 export class BoardMemoryRepository extends BoardRepository {
-  boards: Board[] = [];
+  boards: Board[] = boardsData;
 
   getAll(): Board[] {
     return this.boards;

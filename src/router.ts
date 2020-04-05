@@ -10,3 +10,11 @@ const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
 router.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 router.use('/users', require('./resources/users/user.router'));
 router.use('/boards', require('./resources/board/board.router'));
+router.use('/boards/:id/tasks', (req, res, next) => {
+  req.boardParams = {
+    id: req.params.id,
+  };
+
+  next();
+});
+router.use('/boards/:id/tasks', require('./resources/task/task.router'));
