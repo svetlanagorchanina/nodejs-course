@@ -1,18 +1,20 @@
-const router = require('express').Router();
-const User = require('./user.model');
-const HttpStatus = require('http-status-codes');
-const UserModule = require('./user.module');
-const { USER_SERVICE } = require('./user.constants');
+import { UserService } from './user.service';
+import * as express from 'express';
+import { UserModel } from './user.model';
+import * as HttpStatus from 'http-status-codes';
+import { UserModule } from './user.module';
+import { SERVICE_IDENTIFIER } from './user.constants';
 
+const router = express.Router();
 UserModule.init();
 
-const userService = UserModule.get(USER_SERVICE);
+const userService: UserService = UserModule.get<UserService>(SERVICE_IDENTIFIER.USER_SERVICE);
 
 router.get('/', async (req, res, next) => {
   try {
     const users = await userService.getAll();
 
-    res.status(HttpStatus.OK).json(users.map(User.toResponse));
+    res.status(HttpStatus.OK).json(users.map(UserModel.toResponse));
   } catch (error) {
     return next(error);
   }
@@ -22,7 +24,7 @@ router.get('/:id', async (req, res, next) => {
   try {
     const user = await userService.getUser(req.params.id);
 
-    res.status(HttpStatus.OK).json(User.toResponse(user));
+    res.status(HttpStatus.OK).json(UserModel.toResponse(user));
   } catch (error) {
     return next(error);
   }
@@ -32,7 +34,7 @@ router.post('/', async (req, res, next) => {
   try {
     const user = await userService.createUser(req.body);
 
-    res.status(HttpStatus.OK).json(User.toResponse(user));
+    res.status(HttpStatus.OK).json(UserModel.toResponse(user));
   } catch (error) {
     return next(error);
   }

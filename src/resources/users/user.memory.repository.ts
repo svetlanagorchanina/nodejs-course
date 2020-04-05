@@ -1,17 +1,17 @@
-const inversify = require('inversify');
-const _ = require('lodash');
-const { NotFoundError } = require('../../error');
+import { User, UserRepository } from './user.interface';
+import { injectable } from 'inversify';
+import * as _ from 'lodash';
+import { NotFoundError } from '../../error';
 
-class UserMemoryRepository {
-  constructor() {
-    this.users = [];
-  }
+@injectable()
+export class UserMemoryRepository extends UserRepository {
+  users: User[] = [];
 
-  getAll() {
+  getAll(): User[] {
     return this.users;
   }
 
-  getUser(userId) {
+  getUser(userId: string): User {
     const user = this.users.find(({ id }) => id === userId);
 
     if (!user) {
@@ -21,13 +21,13 @@ class UserMemoryRepository {
     return user;
   }
 
-  addUser(user) {
+  addUser(user: User): User {
     this.users.push(user);
 
     return user;
   }
 
-  updateUser(userId, updatedUser) {
+  updateUser(userId: string, updatedUser: User): User {
     const user = this.users.find(({ id }) => id === userId);
 
     if (!user) {
@@ -37,16 +37,11 @@ class UserMemoryRepository {
     return Object.assign(user, updatedUser);
   }
 
-  deleteUser(userId) {
+  deleteUser(userId: string) {
     const removedUsers = _.remove(this.users, ({ id }) => id === userId);
 
     if (!removedUsers.length) {
       throw new NotFoundError('User not found');
     }
-
-    return removedUsers;
   }
 }
-inversify.decorate(inversify.injectable(), UserMemoryRepository);
-
-module.exports = UserMemoryRepository;
