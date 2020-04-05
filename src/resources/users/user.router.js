@@ -8,36 +8,54 @@ UserModule.init();
 
 const userService = UserModule.get(USER_SERVICE);
 
-router.get('/', async (req, res) => {
-  const users = await userService.getAll();
+router.get('/', async (req, res, next) => {
+  try {
+    const users = await userService.getAll();
 
-  res.status(HttpStatus.OK).json(users.map(User.toResponse));
+    res.status(HttpStatus.OK).json(users.map(User.toResponse));
+  } catch (error) {
+    return next(error);
+  }
 });
 
-router.get('/:id', async (req, res) => {
-  const user = await userService.getUser(req.params.id);
+router.get('/:id', async (req, res, next) => {
+  try {
+    const user = await userService.getUser(req.params.id);
 
-  res.status(HttpStatus.OK).json(User.toResponse(user));
+    res.status(HttpStatus.OK).json(User.toResponse(user));
+  } catch (error) {
+    return next(error);
+  }
 });
 
-router.post('/', async (req, res) => {
-  const user = await userService.createUser(req.body);
+router.post('/', async (req, res, next) => {
+  try {
+    const user = await userService.createUser(req.body);
 
-  res.status(HttpStatus.OK).json(User.toResponse(user));
+    res.status(HttpStatus.OK).json(User.toResponse(user));
+  } catch (error) {
+    return next(error);
+  }
 });
 
-router.put('/:id', async (req, res) => {
-  const user = await userService.updateUser(req.params.id, req.body);
+router.put('/:id', async (req, res, next) => {
+  try {
+    const user = await userService.updateUser(req.params.id, req.body);
 
-  console.log(user);
-
-  res.status(HttpStatus.OK).json(user);
+    res.status(HttpStatus.OK).json(user);
+  } catch (error) {
+    return next(error);
+  }
 });
 
-router.delete('/:id', async (req, res) => {
-  await userService.deleteUser(req.params.id);
+router.delete('/:id', async (req, res, next) => {
+  try {
+    await userService.deleteUser(req.params.id);
 
-  res.status(HttpStatus.NO_CONTENT).send();
+    res.status(HttpStatus.NO_CONTENT).send();
+  } catch (error) {
+    return next(error);
+  }
 });
 
 module.exports = router;

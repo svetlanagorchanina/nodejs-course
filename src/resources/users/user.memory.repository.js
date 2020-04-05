@@ -1,5 +1,6 @@
 const inversify = require('inversify');
 const _ = require('lodash');
+const { NotFoundError } = require('../../error');
 
 class UserMemoryRepository {
   constructor() {
@@ -10,8 +11,14 @@ class UserMemoryRepository {
     return this.users;
   }
 
-  getUser(id) {
-    return this.users.find(user => user.id === id);
+  getUser(userId) {
+    const user = this.users.find(({ id }) => id === userId);
+
+    if (!user) {
+      throw new NotFoundError('User not found');
+    }
+
+    return user;
   }
 
   addUser(user) {
@@ -22,11 +29,22 @@ class UserMemoryRepository {
 
   updateUser(userId, updatedUser) {
     const user = this.users.find(({ id }) => id === userId);
+
+    if (!user) {
+      throw new NotFoundError('User not found');
+    }
+
     return Object.assign(user, updatedUser);
   }
 
-  deleteUser(id) {
-    return _.remove(this.users, user => user.id === id);
+  deleteUser(userId) {
+    const removedUsers = _.remove(this.users, ({ id }) => id === userId);
+
+    if (!removedUsers.length) {
+      throw new NotFoundError('User not found');
+    }
+
+    return removedUsers;
   }
 }
 inversify.decorate(inversify.injectable(), UserMemoryRepository);

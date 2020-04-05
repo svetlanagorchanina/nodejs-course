@@ -12,5 +12,14 @@ app.use(express.json());
 
 app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 app.use('/', router);
+app.use((err, req, res, next) => {
+  if (err) {
+    res.status(err.code).json(err);
+
+    return;
+  }
+
+  next();
+});
 
 module.exports = app;
