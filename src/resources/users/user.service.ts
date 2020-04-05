@@ -1,13 +1,13 @@
 import { inject, injectable } from 'inversify';
 import { User, UserRepository } from './user.interface';
-import { SERVICE_IDENTIFIER } from './user.constants';
+import { USER_SERVICE_IDENTIFIER } from './user.constants';
 import { UserModel } from './user.model';
 
 @injectable()
 export class UserService {
   userRepository: UserRepository;
 
-  constructor(@inject(SERVICE_IDENTIFIER.USER_REPOSITORY) userRepository: UserRepository) {
+  constructor(@inject(USER_SERVICE_IDENTIFIER.USER_REPOSITORY) userRepository: UserRepository) {
     this.userRepository = userRepository;
   }
 

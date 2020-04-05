@@ -1,5 +1,5 @@
 import { Container } from 'inversify';
-import { SERVICE_IDENTIFIER } from './user.constants';
+import { USER_SERVICE_IDENTIFIER } from './user.constants';
 import { UserRepository } from './user.interface';
 import { UserService } from './user.service';
 import { UserMemoryRepository } from './user.memory.repository';
@@ -9,8 +9,8 @@ export class UserModule {
 
   static init() {
     UserModule.container = new Container();
-    UserModule.container.bind<UserRepository>(SERVICE_IDENTIFIER.USER_REPOSITORY).to(UserMemoryRepository);
-    UserModule.container.bind<UserService>(SERVICE_IDENTIFIER.USER_SERVICE).to(UserService);
+    UserModule.container.bind<UserRepository>(USER_SERVICE_IDENTIFIER.USER_REPOSITORY).to(UserMemoryRepository);
+    UserModule.container.bind<UserService>(USER_SERVICE_IDENTIFIER.USER_SERVICE).to(UserService);
   }
 
   static get<T>(serviceType) {

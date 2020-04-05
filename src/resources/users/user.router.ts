@@ -3,12 +3,12 @@ import * as express from 'express';
 import { UserModel } from './user.model';
 import * as HttpStatus from 'http-status-codes';
 import { UserModule } from './user.module';
-import { SERVICE_IDENTIFIER } from './user.constants';
+import { USER_SERVICE_IDENTIFIER } from './user.constants';
 
 const router = express.Router();
 UserModule.init();
 
-const userService: UserService = UserModule.get<UserService>(SERVICE_IDENTIFIER.USER_SERVICE);
+const userService: UserService = UserModule.get<UserService>(USER_SERVICE_IDENTIFIER.USER_SERVICE);
 
 router.get('/', async (req, res, next) => {
   try {
