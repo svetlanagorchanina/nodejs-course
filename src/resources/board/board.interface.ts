@@ -1,10 +1,5 @@
 import { injectable } from 'inversify';
-
-export interface Column {
-    id: string;
-    title: string;
-    order: number;
-}
+import { Column } from '../column/column.interface';
 
 
 export interface Board {
