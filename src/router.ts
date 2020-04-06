@@ -3,6 +3,7 @@ import * as swaggerUI from 'swagger-ui-express';
 import * as path from 'path';
 import * as YAML from 'yamljs';
 import { setBoardParams } from './middlewares/setBoardParams';
+import { NotFoundError } from './error';
 
 export const router = express.Router();
 
@@ -13,3 +14,6 @@ router.use('/users', require('./resources/users/user.router'));
 router.use('/boards', require('./resources/board/board.router'));
 router.use('/boards/:id/tasks', setBoardParams);
 router.use('/boards/:id/tasks', require('./resources/task/task.router'));
+router.use('*', () => {
+  throw new NotFoundError('Page not found');
+});
