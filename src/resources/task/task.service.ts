@@ -29,7 +29,15 @@ export class TaskService {
     return this.taskRepository.updateTask({ boardId, taskId, task });
   }
 
+  updateUserTasks(userId: string, task: Task): Task[] {
+    return this.taskRepository.updateUserTasks(userId, task);
+  }
+
   deleteTask(boardId: string, taskId: string) {
     return this.taskRepository.deleteTask(boardId, taskId);
+  }
+
+  deleteAllTasksByBoardId(boardId: string) {
+    return this.taskRepository.deleteAllTasksByBoardId(boardId);
   }
 }

@@ -48,6 +48,16 @@ export class TaskMemoryRepository extends TaskRepository {
     return Object.assign(currentTask, task);
   }
 
+  updateUserTasks(userId: string, updatedTask): Task[] {
+    return this.tasks.map(task => {
+      if (task.userId === userId) {
+        Object.assign(task, updatedTask);
+      }
+
+      return task;
+    });
+  }
+
   deleteTask(boardId: string, taskId: string) {
     this.checkBoard(boardId);
     const removedTasks = _.remove(this.tasks, task => task.id === taskId && task.boardId === boardId);
@@ -55,5 +65,9 @@ export class TaskMemoryRepository extends TaskRepository {
     if (!removedTasks.length) {
       throw new NotFoundError('Task not found');
     }
+  }
+
+  deleteAllTasksByBoardId(boardId: string) {
+    _.remove(this.tasks, task => task.boardId === boardId);
   }
 }

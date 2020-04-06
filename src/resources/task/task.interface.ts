@@ -16,5 +16,7 @@ export abstract class TaskRepository {
     public abstract getTask(boardId: string, taskId: string): Task;
     public abstract addTask(boardId, task: Task): Task;
     public abstract updateTask({ boardId, taskId, task }: { boardId: string, taskId: string, task: Task }): Task;
+    public abstract updateUserTasks(userId: string, task: Task): Task[];
     public abstract deleteTask(boardId: string, taskId: string): void;
+    public abstract deleteAllTasksByBoardId(boardId: string): void;
 }
