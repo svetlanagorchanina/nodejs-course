@@ -16,6 +16,6 @@ export class BoardModel {
   constructor(board: Board = {} as Board) {
     this.id = uuid();
     this.title = board.title || DEFAULT_BOARD.title;
-    this.columns = board.columns.map(column => new ColumnModel(column)) || DEFAULT_BOARD.columns;
+    this.columns = (board.columns || DEFAULT_BOARD.columns).map(column => new ColumnModel(column));
   }
 }

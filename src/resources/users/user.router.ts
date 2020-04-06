@@ -59,7 +59,7 @@ router.put('/:id', async (req, res, next) => {
 router.delete('/:id', async (req, res, next) => {
   try {
     await userService.deleteUser(req.params.id);
-    await taskService.updateUserTasks(this.params.id, { userId: null } as Task);
+    await taskService.updateUserTasks(req.params.id, { userId: null } as Task);
 
     res.status(HttpStatus.NO_CONTENT).send();
   } catch (error) {
