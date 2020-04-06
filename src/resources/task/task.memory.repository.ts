@@ -2,7 +2,7 @@ import { Task, TaskRepository } from './task.interface';
 import { injectable } from 'inversify';
 import * as _ from 'lodash';
 import { NotFoundError } from '../../error';
-import { boardsData, tasksData } from '../data';
+import { boardsData, tasksData } from '../../data';
 import { Board } from '../board/board.interface';
 
 @injectable()

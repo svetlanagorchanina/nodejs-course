@@ -2,7 +2,7 @@ import { User, UserRepository } from './user.interface';
 import { injectable } from 'inversify';
 import * as _ from 'lodash';
 import { NotFoundError } from '../../error';
-import { usersData } from '../data';
+import { usersData } from '../../data';
 
 @injectable()
 export class UserMemoryRepository extends UserRepository {
