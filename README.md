@@ -8,7 +8,13 @@
 ## Downloading
 
 ```
-git clone {repository URL}
+git clone https://github.com/svetlanagorchanina/nodejs-course.git
+```
+
+## Checkout to Development Branch
+
+```
+git checkout develop
 ```
 
 ## Installing NPM modules
