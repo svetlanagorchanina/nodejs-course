@@ -1,11 +1,12 @@
 import { ERROR_MESSAGE } from './error.constants';
 import * as HttpStatus from 'http-status-codes';
 
-class BaseError {
+export class BaseError extends Error {
   message: string;
   code: number;
 
   constructor(message: string, code: number) {
+    super();
     this.message = message;
     this.code = code;
   }
