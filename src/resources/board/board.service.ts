@@ -2,13 +2,20 @@ import { inject, injectable } from 'inversify';
 import { Board, BoardRepository } from './board.interface';
 import { BOARD_SERVICE_IDENTIFIER } from './board.constants';
 import { BoardModel } from './board.model';
+import { TaskService } from "../task/task.service";
+import { TASK_SERVICE_IDENTIFIER } from "../task/task.constants";
 
 @injectable()
 export class BoardService {
   boardRepository: BoardRepository;
+  taskService: TaskService;
 
-  constructor(@inject(BOARD_SERVICE_IDENTIFIER.BOARD_REPOSITORY) boardRepository: BoardRepository) {
+  constructor(
+      @inject(BOARD_SERVICE_IDENTIFIER.BOARD_REPOSITORY) boardRepository: BoardRepository,
+      @inject(TASK_SERVICE_IDENTIFIER.TASK_SERVICE) taskService: TaskService,
+  ) {
     this.boardRepository = boardRepository;
+    this.taskService = taskService;
   }
 
   getAll(): Board[] {
@@ -30,6 +37,7 @@ export class BoardService {
   }
 
   deleteBoard(id: string) {
-    return this.boardRepository.deleteBoard(id);
+    this.boardRepository.deleteBoard(id);
+    this.taskService.deleteAllTasksByBoardId(id);
   }
 }

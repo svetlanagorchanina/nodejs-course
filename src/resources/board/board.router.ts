@@ -3,16 +3,11 @@ import * as express from 'express';
 import * as HttpStatus from 'http-status-codes';
 import { BoardModule } from './board.module';
 import { BOARD_SERVICE_IDENTIFIER } from './board.constants';
-import { TaskModule } from '../task/task.module';
-import { TaskService } from '../task/task.service';
-import { TASK_SERVICE_IDENTIFIER } from '../task/task.constants';
 
 const router = express.Router();
 BoardModule.init();
-TaskModule.init();
 
 const boardService: BoardService = BoardModule.get<BoardService>(BOARD_SERVICE_IDENTIFIER.BOARD_SERVICE);
-const taskService: TaskService = TaskModule.get<TaskService>(TASK_SERVICE_IDENTIFIER.TASK_SERVICE);
 
 router.get('/', async (req, res, next) => {
   try {
@@ -57,7 +52,6 @@ router.put('/:id', async (req, res, next) => {
 router.delete('/:id', async (req, res, next) => {
   try {
     await boardService.deleteBoard(req.params.id);
-    await taskService.deleteAllTasksByBoardId(req.params.id);
 
     res.status(HttpStatus.NO_CONTENT).send();
   } catch (error) {
