@@ -2,13 +2,21 @@ import { inject, injectable } from 'inversify';
 import { User, UserRepository } from './user.interface';
 import { USER_SERVICE_IDENTIFIER } from './user.constants';
 import { UserModel } from './user.model';
+import { Task } from '../task/task.interface';
+import { TaskService } from '../task/task.service';
+import { TASK_SERVICE_IDENTIFIER } from '../task/task.constants';
 
 @injectable()
 export class UserService {
   userRepository: UserRepository;
+  taskService: TaskService;
 
-  constructor(@inject(USER_SERVICE_IDENTIFIER.USER_REPOSITORY) userRepository: UserRepository) {
+  constructor(
+      @inject(USER_SERVICE_IDENTIFIER.USER_REPOSITORY) userRepository: UserRepository,
+      @inject(TASK_SERVICE_IDENTIFIER.TASK_SERVICE) taskService: TaskService,
+  ) {
     this.userRepository = userRepository;
+    this.taskService = taskService;
   }
 
   getAll(): User[] {
@@ -30,6 +38,7 @@ export class UserService {
   }
 
   deleteUser(id: string) {
-    return this.userRepository.deleteUser(id);
+    this.userRepository.deleteUser(id);
+    this.taskService.updateUserTasks(id, { userId: null } as Task);
   }
 }

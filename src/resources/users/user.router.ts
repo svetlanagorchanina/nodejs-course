@@ -4,17 +4,10 @@ import { UserModel } from './user.model';
 import * as HttpStatus from 'http-status-codes';
 import { UserModule } from './user.module';
 import { USER_SERVICE_IDENTIFIER } from './user.constants';
-import { TaskService } from '../task/task.service';
-import { TaskModule } from '../task/task.module';
-import { TASK_SERVICE_IDENTIFIER } from '../task/task.constants';
-import { Task } from '../task/task.interface';
 
-const router = express.Router();
 UserModule.init();
-TaskModule.init();
-
+const router = express.Router();
 const userService: UserService = UserModule.get<UserService>(USER_SERVICE_IDENTIFIER.USER_SERVICE);
-const taskService: TaskService = TaskModule.get<TaskService>(TASK_SERVICE_IDENTIFIER.TASK_SERVICE);
 
 router.get('/', async (req, res, next) => {
   try {
@@ -59,7 +52,6 @@ router.put('/:id', async (req, res, next) => {
 router.delete('/:id', async (req, res, next) => {
   try {
     await userService.deleteUser(req.params.id);
-    await taskService.updateUserTasks(req.params.id, { userId: null } as Task);
 
     res.status(HttpStatus.NO_CONTENT).send();
   } catch (error) {
