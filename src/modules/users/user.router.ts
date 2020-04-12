@@ -4,59 +4,40 @@ import { UserModel } from './user.model';
 import * as HttpStatus from 'http-status-codes';
 import { UserModule } from './user.module';
 import { USER_SERVICE_IDENTIFIER } from './user.constants';
+import { safeHandler } from "../../decorators/safeHandler";
+import { User } from "./user.interface";
 
 UserModule.init();
 const router = express.Router();
 const userService: UserService = UserModule.get<UserService>(USER_SERVICE_IDENTIFIER.USER_SERVICE);
 
-router.get('/', async (req, res, next) => {
-  try {
-    const users = await userService.getAll();
+router.route('/')
+  .get(safeHandler.bind(null, async (req, res) => {
+    const users: User[] = await userService.getAll();
 
     res.status(HttpStatus.OK).json(users.map(UserModel.toResponse));
-  } catch (error) {
-    return next(error);
-  }
-});
-
-router.get('/:id', async (req, res, next) => {
-  try {
-    const user = await userService.getUser(req.params.id);
+  }))
+  .post(safeHandler.bind(null, async (req, res) => {
+    const user: User = await userService.createUser(req.body);
 
     res.status(HttpStatus.OK).json(UserModel.toResponse(user));
-  } catch (error) {
-    return next(error);
-  }
-});
+  }));
 
-router.post('/', async (req, res, next) => {
-  try {
-    const user = await userService.createUser(req.body);
+router.route('/:id')
+  .get(safeHandler.bind(null, async (req, res) => {
+    const user: User = await userService.getUser(req.params.id);
 
     res.status(HttpStatus.OK).json(UserModel.toResponse(user));
-  } catch (error) {
-    return next(error);
-  }
-});
-
-router.put('/:id', async (req, res, next) => {
-  try {
-    const user = await userService.updateUser(req.params.id, req.body);
+  }))
+  .put(safeHandler.bind(null, async (req, res) => {
+    const user: User = await userService.updateUser(req.params.id, req.body);
 
     res.status(HttpStatus.OK).json(user);
-  } catch (error) {
-    return next(error);
-  }
-});
-
-router.delete('/:id', async (req, res, next) => {
-  try {
+  }))
+  .delete(safeHandler.bind(null, async (req, res) => {
     await userService.deleteUser(req.params.id);
 
     res.status(HttpStatus.NO_CONTENT).send();
-  } catch (error) {
-    return next(error);
-  }
-});
+  }));
 
 module.exports = router;

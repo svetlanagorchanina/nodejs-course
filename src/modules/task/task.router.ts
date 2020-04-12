@@ -3,65 +3,45 @@ import * as express from 'express';
 import * as HttpStatus from 'http-status-codes';
 import { TaskModule } from './task.module';
 import { TASK_SERVICE_IDENTIFIER } from './task.constants';
+import { safeHandler } from "../../decorators/safeHandler";
+import { Task } from "./task.interface";
 
-const router = express.Router();
 TaskModule.init();
-
+const router = express.Router();
 const taskService: TaskService = TaskModule.get<TaskService>(TASK_SERVICE_IDENTIFIER.TASK_SERVICE);
 
-router.get('/', async (req, res, next) => {
-  try {
-    const tasks = await taskService.getAll(req.boardParams.id);
+router.route('/')
+  .get(safeHandler.bind(null, async (req, res) => {
+    const tasks: Task[] = await taskService.getAll(req.boardParams.id);
 
     res.status(HttpStatus.OK).json(tasks);
-  } catch (error) {
-    return next(error);
-  }
-});
-
-router.get('/:id', async (req, res, next) => {
-  try {
-    const task = await taskService.getTask(req.boardParams.id, req.params.id);
+  }))
+  .post(safeHandler.bind(null, async (req, res) => {
+    const task: Task = await taskService.createTask(req.boardParams.id, req.body);
 
     res.status(HttpStatus.OK).json(task);
-  } catch (error) {
-    return next(error);
-  }
-});
+  }));
 
-router.post('/', async (req, res, next) => {
-  try {
-    const task = await taskService.createTask(req.boardParams.id, req.body);
+router.route('/:id')
+  .get(safeHandler.bind(null, async (req, res) => {
+    const task: Task = await taskService.getTask(req.boardParams.id, req.params.id);
 
     res.status(HttpStatus.OK).json(task);
-  } catch (error) {
-    return next(error);
-  }
-});
-
-router.put('/:id', async (req, res, next) => {
-  try {
+  }))
+  .put(safeHandler.bind(null, async (req, res) => {
     const params = {
       boardId: req.boardParams.id,
       taskId: req.params.id,
       task: req.body,
     };
-    const task = await taskService.updateTask(params);
+    const task: Task = await taskService.updateTask(params);
 
     res.status(HttpStatus.OK).json(task);
-  } catch (error) {
-    return next(error);
-  }
-});
-
-router.delete('/:id', async (req, res, next) => {
-  try {
+  }))
+  .delete(safeHandler.bind(null, async (req, res) => {
     await taskService.deleteTask(req.boardParams.id, req.params.id);
 
     res.status(HttpStatus.NO_CONTENT).send();
-  } catch (error) {
-    return next(error);
-  }
-});
+  }));
 
 module.exports = router;
