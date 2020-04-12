@@ -26,7 +26,9 @@ function run() {
     options.input ? fs.createReadStream(options.input) : process.stdin,
     new CaesarCipherStream({ action: options.action }),
     options.output
-      ? fs.createWriteStream(options.output, { flags: 'a' })
+      ? fs.createWriteStream(options.output, {
+          flags: fs.constants.O_RDWR | fs.constants.O_APPEND
+        })
       : process.stdout
   ).catch(error => {
     logError({ message: `${error.toString()}\n`, exitCode: 9 });

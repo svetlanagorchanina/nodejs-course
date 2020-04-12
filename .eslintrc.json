@@ -304,8 +304,7 @@
         "max-params": [
             2,
             7
-        ],
-        "no-bitwise": 2
+        ]
     },
     "globals": {
         "$": true,
