@@ -3,6 +3,9 @@ const ACTIONS = {
   DECODE: 'decode'
 };
 
+const DEFAULT_EXIT_CODE = 9;
+
 module.exports = {
-  ACTIONS
+  ACTIONS,
+  DEFAULT_EXIT_CODE
 };

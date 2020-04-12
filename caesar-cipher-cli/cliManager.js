@@ -12,30 +12,25 @@ function initOptions() {
   program.parse(process.argv);
 }
 
-function getOptions() {
-  return program.opts();
-}
-
-function validateOptions() {
-  const options = getOptions();
-
+function getValidationError(options) {
   if (![ACTIONS.DECODE, ACTIONS.ENCODE].includes(options.action)) {
-    return {
-      message: 'Error: Action can be only "encode" or "decode"',
-      exitCode: 9
-    };
+    return { message: 'Action can be only "encode" or "decode"' };
   }
 
   if (!Number.isInteger(options.shift) || options.shift < 0) {
-    return {
-      message: 'Error: Shift parameter should be positive integer',
-      exitCode: 9
-    };
+    return { message: 'Shift parameter should be positive integer' };
   }
 }
 
-module.exports = {
-  initOptions,
-  validateOptions,
-  getOptions
-};
+function parseOptions() {
+  return new Promise((resolve, reject) => {
+    initOptions();
+
+    const options = program.opts();
+    const error = getValidationError(options);
+
+    error ? reject(error) : resolve(options);
+  });
+}
+
+module.exports = { parseOptions };

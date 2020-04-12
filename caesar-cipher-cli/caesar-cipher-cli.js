@@ -1,36 +1,18 @@
-const fs = require('fs');
-const cliManger = require('./cliManager');
-const util = require('util');
-const stream = require('stream');
-const pipeline = util.promisify(stream.pipeline);
-const CaesarCipherStream = require('./caesarCipher/caesarCipherStream');
-const { logError } = require('./utils');
+const { buildCaesarPipeline } = require('./caesarPipeline');
+const { parseOptions } = require('./cliManager');
+const { EOL } = require('os');
+const { handleError } = require('./utils/handleError');
+const { DEFAULT_EXIT_CODE } = require('./constants');
 
 process.on('exit', code => {
   return console.log(`\nExit with code ${code}`);
 });
 
-cliManger.initOptions();
-const options = cliManger.getOptions();
-const validateError = cliManger.validateOptions();
-
-if (validateError) {
-  logError(validateError);
-  return;
-}
-
-run();
-
-function run() {
-  pipeline(
-    options.input ? fs.createReadStream(options.input) : process.stdin,
-    new CaesarCipherStream({ action: options.action }),
-    options.output
-      ? fs.createWriteStream(options.output, {
-          flags: fs.constants.O_RDWR | fs.constants.O_APPEND
-        })
-      : process.stdout
-  ).catch(error => {
-    logError({ message: `${error.toString()}\n`, exitCode: 9 });
-  });
-}
+parseOptions()
+  .then(options => buildCaesarPipeline(options))
+  .catch(error =>
+    handleError({
+      message: error.message + EOL,
+      exitCode: error.exitCode || DEFAULT_EXIT_CODE
+    })
+  );

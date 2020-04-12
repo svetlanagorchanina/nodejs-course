@@ -1,13 +1,13 @@
 const stream = require('stream');
 const { ACTIONS } = require('../constants');
 const caesarCipher = require('./caesarCipher');
-const { getOptions } = require('../cliManager');
 const Transform = stream.Transform;
 
 class CaesarCipherStream extends Transform {
-  constructor({ action }) {
+  constructor({ action, shift }) {
     super();
     this.action = action;
+    this.shift = shift;
   }
 
   _transform(chunk, encoding, done) {
@@ -19,11 +19,9 @@ class CaesarCipherStream extends Transform {
   }
 
   transformText(text) {
-    const options = getOptions();
-
     const actionHandlerMap = {
-      [ACTIONS.ENCODE]: () => caesarCipher.encode(text, options.shift),
-      [ACTIONS.DECODE]: () => caesarCipher.decode(text, options.shift)
+      [ACTIONS.ENCODE]: () => caesarCipher.encode(text, this.shift),
+      [ACTIONS.DECODE]: () => caesarCipher.decode(text, this.shift)
     };
 
     return actionHandlerMap[this.action]();
