@@ -1,4 +1,5 @@
 import * as winston from "winston";
+import { config } from "../common/config";
 
 const LOG_FILE_NAME = 'info.log';
 
@@ -11,8 +12,8 @@ export class LoggerService {
             format: winston.format.json(),
             transports: [
                 new winston.transports.File({ filename: LOG_FILE_NAME }),
-                new winston.transports.Console(),
-            ]
+                !config.isLocalHost && new winston.transports.Console(),
+            ].filter(Boolean),
         });
     }
 

@@ -1,4 +1,3 @@
-import { ERROR_MESSAGE } from './error.constants';
 import * as HttpStatus from 'http-status-codes';
 
 export class BaseError extends Error {
@@ -14,7 +13,7 @@ export class BaseError extends Error {
 
 export class NotFoundError extends BaseError {
   constructor(
-    message = ERROR_MESSAGE.NOT_FOUND,
+    message = HttpStatus.getStatusText(HttpStatus.NOT_FOUND),
     errorCode = HttpStatus.NOT_FOUND
   ) {
     super(message, errorCode);

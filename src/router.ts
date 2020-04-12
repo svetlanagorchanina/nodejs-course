@@ -10,10 +10,9 @@ export const router = express.Router();
 const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
 
 router.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
-router.use('/users', require('./resources/users/user.router'));
-router.use('/boards', require('./resources/board/board.router'));
-router.use('/boards/:id/tasks', setBoardParams);
-router.use('/boards/:id/tasks', require('./resources/task/task.router'));
+router.use('/users', require('./modules/users/user.router'));
+router.use('/boards', require('./modules/board/board.router'));
+router.use('/boards/:id/tasks', setBoardParams, require('./modules/task/task.router'));
 router.use('*', () => {
   throw new NotFoundError('Page not found');
 });
