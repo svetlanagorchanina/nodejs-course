@@ -4,11 +4,6 @@ import { router } from './router';
 import { responseLogger } from "./middlewares/responseLogger";
 import { errorLogger } from "./middlewares/errorLogger";
 import { errorHandler } from "./middlewares/errorHandler";
-import { LoggerService } from "./services/loggerService";
-
-const logger = new LoggerService();
-process.on('uncaughtException', err => logger.logError(err));
-process.on('unhandledRejection', err => logger.logError(err));
 
 export const app = express();
 
