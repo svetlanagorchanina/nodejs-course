@@ -1,17 +1,18 @@
 import * as winston from "winston";
 
-const LOG_FILE_NAME = 'info.log';
-
 export class LoggerService {
     private logger;
+    private readonly LOG_DIR = 'log';
+    private readonly INFO_LOG_FILE_NAME = 'info.log';
+    private readonly ERROR_LOG_FILE_NAME = 'error.log';
 
     constructor() {
         this.logger = winston.createLogger({
-            level: 'info',
             format: winston.format.json(),
             transports: [
-                new winston.transports.File({ filename: LOG_FILE_NAME }),
-            ].filter(Boolean),
+                new winston.transports.File({ dirname: this.LOG_DIR, filename: this.INFO_LOG_FILE_NAME, level: 'info' }),
+                new winston.transports.File({ dirname: this.LOG_DIR, filename: this.ERROR_LOG_FILE_NAME, level: 'error' }),
+            ],
         });
     }
 
