@@ -283,8 +283,6 @@ paths:
               type: object
               title: example
               properties:
-                id:
-                  type: string
                 title:
                   type: string
                   description: The board's name
@@ -444,9 +442,6 @@ paths:
               type: object
               title: example
               properties:
-                id:
-                  type: string
-                  title: The task's ID
                 title:
                   type: string
                   description: The task's title
@@ -465,7 +460,6 @@ paths:
                   type: string
                   description: Column ID
               required:
-                - id
                 - order
                 - boardId
                 - columnId
