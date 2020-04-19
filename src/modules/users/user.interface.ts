@@ -13,5 +13,5 @@ export abstract class UserRepository {
     public abstract getUser(id: string): Promise<User>;
     public abstract addUser(user: User): Promise<User>;
     public abstract updateUser(id: string, user: User): Promise<User>;
-    public abstract deleteUser(id: string): void;
+    public abstract deleteUser(id: string): Promise<any>;
 }

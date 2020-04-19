@@ -35,11 +35,13 @@ export class UserMemoryRepository extends UserRepository {
     return new Promise(resolve => resolve(updatedUser));
   }
 
-  deleteUser(userId: string) {
+  deleteUser(userId: string): Promise<any> {
     const removedUsers = _.remove(this.users, ({ id }) => id === userId);
 
     if (!removedUsers.length) {
       throw new NotFoundError('User not found');
     }
+
+    return new Promise(resolve => resolve(true));
   }
 }
