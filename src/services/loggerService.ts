@@ -1,4 +1,5 @@
 import * as winston from "winston";
+import { withDate } from '../decorators/withDate';
 
 export class LoggerService {
     private logger;
@@ -17,10 +18,12 @@ export class LoggerService {
         });
     }
 
+    @withDate
     logInfo(data) {
         this.logger.log('info', 'API request', data);
     }
 
+    @withDate
     logError(error) {
         this.logger.log('error', '' , error);
     }
