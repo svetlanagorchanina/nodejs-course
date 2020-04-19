@@ -39,6 +39,6 @@ export class BoardService {
   async deleteBoard(id: string): Promise<any> {
     // TODO: add cascade deletion
     await this.boardRepository.deleteBoard(id);
-    this.taskService.deleteAllTasksByBoardId(id);
+    await this.taskService.deleteAllTasksByBoardId(id);
   }
 }

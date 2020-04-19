@@ -40,6 +40,6 @@ export class UserService {
   async deleteUser(id: string): Promise<any> {
     // TODO: add cascade deletion
     await this.userRepository.deleteUser(id);
-    this.taskService.updateUserTasks(id, { userId: null } as Task);
+    await this.taskService.updateUserTasks(id, { userId: null } as Task);
   }
 }
