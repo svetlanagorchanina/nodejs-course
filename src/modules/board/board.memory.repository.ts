@@ -8,41 +8,40 @@ import { boardsData } from '../../data';
 export class BoardMemoryRepository extends BoardRepository {
   boards: Board[] = boardsData;
 
-  getAll(): Board[] {
-    return this.boards;
+  getAll(): Promise<Board[]> {
+    return new Promise(resolve => resolve(this.boards));
   }
 
-  getBoard(boardId: string): Board {
+  getBoard(boardId: string): Promise<Board> {
     const board = this.boards.find(({ id }) => id === boardId);
 
     if (!board) {
       throw new NotFoundError('Board not found');
     }
 
-    return board;
+    return new Promise(resolve => resolve(board));
   }
 
-  addBoard(board: Board): Board {
+  addBoard(board: Board): Promise<Board> {
     this.boards.push(board);
 
-    return board;
+    return new Promise(resolve => resolve(board));
   }
 
-  updateBoard(boardId: string, updatedBoard: Board): Board {
-    const board = this.boards.find(({ id }) => id === boardId);
+  async updateBoard(boardId: string, updatedBoardFields: Board): Promise<Board> {
+    const board = await this.getBoard(boardId);
+    const updatedBoard = Object.assign(board, updatedBoardFields);
 
-    if (!board) {
-      throw new NotFoundError('Board not found');
-    }
-
-    return Object.assign(board, updatedBoard);
+    return new Promise(resolve => resolve(updatedBoard));
   }
 
-  deleteBoard(boardId: string) {
+  deleteBoard(boardId: string): Promise<any> {
     const removedBoards = _.remove(this.boards, ({ id }) => id === boardId);
 
     if (!removedBoards.length) {
       throw new NotFoundError('Board not found');
     }
+
+    return new Promise(resolve => resolve(true));
   }
 }

@@ -1,7 +1,6 @@
 import { injectable } from 'inversify';
 import { Column } from '../column/column.interface';
 
-
 export interface Board {
     id: string;
     title: string;
@@ -10,9 +9,9 @@ export interface Board {
 
 @injectable()
 export abstract class BoardRepository {
-    public abstract getAll(): Board[];
-    public abstract getBoard(id: string): Board;
-    public abstract addBoard(user: Board): Board;
-    public abstract updateBoard(id: string, user: Board): Board;
-    public abstract deleteBoard(id: string): void;
+    public abstract getAll(): Promise<Board[]>;
+    public abstract getBoard(id: string): Promise<Board>;
+    public abstract addBoard(user: Board): Promise<Board>;
+    public abstract updateBoard(id: string, user: Board): Promise<Board>;
+    public abstract deleteBoard(id: string): Promise<any>;
 }

@@ -18,26 +18,27 @@ export class BoardService {
     this.taskService = taskService;
   }
 
-  getAll(): Board[] {
+  getAll(): Promise<Board[]> {
     return this.boardRepository.getAll();
   }
 
-  getBoard(id: string): Board {
+  getBoard(id: string): Promise<Board> {
     return this.boardRepository.getBoard(id);
   }
 
-  createBoard(board: Board): Board {
+  createBoard(board: Board): Promise<Board> {
     const newBoard = new BoardModel(board);
 
     return this.boardRepository.addBoard(newBoard);
   }
 
-  updateBoard(id: string, board: Board): Board {
+  updateBoard(id: string, board: Board): Promise<Board> {
     return this.boardRepository.updateBoard(id, board);
   }
 
-  deleteBoard(id: string) {
-    this.boardRepository.deleteBoard(id);
+  async deleteBoard(id: string): Promise<any> {
+    // TODO: add cascade deletion
+    await this.boardRepository.deleteBoard(id);
     this.taskService.deleteAllTasksByBoardId(id);
   }
 }

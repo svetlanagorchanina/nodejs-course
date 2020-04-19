@@ -1,21 +1,32 @@
 import * as uuid from 'uuid';
-import { Board } from './board.interface';
-import { Column } from '../column/column.interface';
-import { ColumnModel } from '../column/column.model';
+import * as mongoose from 'mongoose';
 
-const DEFAULT_BOARD = {
-  title: 'board',
-  columns: [],
-};
+const boardSchema = new mongoose.Schema({
+  _id: {
+    type: String,
+    default: uuid,
+  },
+  title: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  columns: [{
+    _id: {
+      type: String,
+      default: uuid,
+    },
+    order: {
+      type: Number,
+      required: true,
+      min: 0,
+    },
+    title: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+  }],
+});
 
-export class BoardModel {
-  id: string;
-  title: string;
-  columns: Column[];
-
-  constructor(board: Board = {} as Board) {
-    this.id = uuid();
-    this.title = board.title || DEFAULT_BOARD.title;
-    this.columns = (board.columns || DEFAULT_BOARD.columns).map(column => new ColumnModel(column));
-  }
-}
+export const BoardModel = mongoose.model('Board', boardSchema);
