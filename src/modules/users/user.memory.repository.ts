@@ -8,8 +8,8 @@ import { usersData } from '../../data';
 export class UserMemoryRepository extends UserRepository {
   users: User[] = usersData;
 
-  getAll(): User[] {
-    return this.users;
+  getAll(): Promise<User[]> {
+    return new Promise(resolve => resolve(this.users));
   }
 
   getUser(userId: string): User {

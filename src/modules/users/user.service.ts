@@ -19,7 +19,7 @@ export class UserService {
     this.taskService = taskService;
   }
 
-  getAll(): User[] {
+  getAll(): Promise<User[]> {
     return this.userRepository.getAll();
   }
 

@@ -9,7 +9,7 @@ export interface User {
 
 @injectable()
 export abstract class UserRepository {
-    public abstract getAll(): User[];
+    public abstract getAll(): Promise<User[]>;
     public abstract getUser(id: string): User;
     public abstract addUser(user: User): User;
     public abstract updateUser(id: string, user: User): User;

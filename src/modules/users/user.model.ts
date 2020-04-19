@@ -1,28 +1,32 @@
 import * as uuid from 'uuid';
-import * as _ from 'lodash';
 import { User } from './user.interface';
+import * as mongoose from 'mongoose';
 
-const DEFAULT_USER = {
-  name: 'USER',
-  login: 'user',
-  password: 'P@55w0rd'
+const userSchema = new mongoose.Schema({
+  _id: {
+    type: String,
+    default: uuid,
+  },
+  name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  login: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+});
+
+userSchema.statics.toResponse = (user: User) => {
+  const { id, name, login } = user;
+
+  return { id, name, login };
 };
 
-export class UserModel {
-  id: string;
-  name: string;
-  login: string;
-  password: string;
-
-  constructor(user: User = {} as User) {
-    this.id = uuid();
-
-    ['name', 'login', 'password'].forEach((property: string) => {
-      this[property] = user[property] || DEFAULT_USER[property];
-    });
-  }
-
-  static toResponse(user: User) {
-    return _.pick(user, ['id', 'name', 'login']);
-  }
-}
+export const UserModel = mongoose.model('User', userSchema);
