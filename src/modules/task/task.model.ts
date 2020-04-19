@@ -23,20 +23,23 @@ const taskSchema = new mongoose.Schema({
   },
   userId: {
     type: String,
-    default: uuid,
+    ref: 'User',
+    default: null,
   },
   boardId: {
     type: String,
-    default: uuid,
+    required: true,
+    ref: 'Board',
   },
   columnId: {
     type: String,
-    default: uuid,
+    default: null,
   },
 });
+const TASK_RESPONSE_FIELDS = ['id', 'title', 'order', 'description', 'userId', 'boardId', 'columnId'];
 
 taskSchema.statics.toResponse = (task: Task) => {
-  return _.pick(task, ['id', 'title', 'order', 'description', 'userId', 'boardId', 'columnId']);
+  return _.pick(task, TASK_RESPONSE_FIELDS);
 };
 
 export const TaskModel = mongoose.model('Task', taskSchema);

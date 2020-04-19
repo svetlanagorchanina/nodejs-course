@@ -23,9 +23,10 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
 });
+const USER_RESPONSE_FIELDS = ['id', 'name', 'login'];
 
 userSchema.statics.toResponse = (user: User) => {
-  return _.pick(user, ['id', 'name', 'login']);
+  return _.pick(user, USER_RESPONSE_FIELDS);
 };
 
 export const UserModel = mongoose.model('User', userSchema);

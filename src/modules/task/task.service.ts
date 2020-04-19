@@ -2,10 +2,12 @@ import { inject, injectable } from 'inversify';
 import { Task, TaskRepository } from './task.interface';
 import { TASK_SERVICE_IDENTIFIER } from './task.constants';
 import { TaskModel } from './task.model';
+import * as _ from 'lodash';
 
 @injectable()
 export class TaskService {
   taskRepository: TaskRepository;
+  static readonly EDITABLE_FIELDS = ['title', 'order', 'description', 'userId', 'boardId', 'columnId'];
 
   constructor(@inject(TASK_SERVICE_IDENTIFIER.TASK_REPOSITORY) taskRepository: TaskRepository) {
     this.taskRepository = taskRepository;
@@ -26,11 +28,11 @@ export class TaskService {
   }
 
   updateTask({ boardId, taskId, task }): Promise<Task> {
-    return this.taskRepository.updateTask({ boardId, taskId, task });
+    return this.taskRepository.updateTask({ boardId, taskId, task: _.pick(task, TaskService.EDITABLE_FIELDS) });
   }
 
   updateUserTasks(userId: string, task: Task): Promise<Task[]> {
-    return this.taskRepository.updateUserTasks(userId, task);
+    return this.taskRepository.updateUserTasks(userId, _.pick(task, TaskService.EDITABLE_FIELDS));
   }
 
   deleteTask(boardId: string, taskId: string) {

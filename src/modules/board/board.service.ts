@@ -4,11 +4,13 @@ import { BOARD_SERVICE_IDENTIFIER } from './board.constants';
 import { BoardModel } from './board.model';
 import { TaskService } from "../task/task.service";
 import { TASK_SERVICE_IDENTIFIER } from "../task/task.constants";
+import * as _ from 'lodash';
 
 @injectable()
 export class BoardService {
   boardRepository: BoardRepository;
   taskService: TaskService;
+  static readonly EDITABLE_FIELDS = ['columns', 'title'];
 
   constructor(
       @inject(BOARD_SERVICE_IDENTIFIER.BOARD_REPOSITORY) boardRepository: BoardRepository,
@@ -33,7 +35,7 @@ export class BoardService {
   }
 
   updateBoard(id: string, board: Board): Promise<Board> {
-    return this.boardRepository.updateBoard(id, board);
+    return this.boardRepository.updateBoard(id, _.pick(board, BoardService.EDITABLE_FIELDS));
   }
 
   async deleteBoard(id: string): Promise<any> {

@@ -14,7 +14,7 @@ const boardSchema = new mongoose.Schema({
     trim: true,
   },
   columns: [{
-    _id: {
+    id: {
       type: String,
       default: uuid,
     },
@@ -30,12 +30,14 @@ const boardSchema = new mongoose.Schema({
     },
   }],
 });
+const BOARD_RESPONSE_FIELDS = ['id', 'title', 'columns'];
+const COLUMN_RESPONSE_FIELDS = ['id', 'order', 'title'];
 
 boardSchema.statics.toResponse = (board: Board) => {
-  const columns = board.columns.map(column => _.pick(column, ['id', 'order', 'title']));
+  const columns = board.columns.map(column => _.pick(column, COLUMN_RESPONSE_FIELDS));
 
   return {
-    ..._.pick(board, ['id', 'title']),
+    ..._.pick(board, BOARD_RESPONSE_FIELDS),
     columns,
   };
 };

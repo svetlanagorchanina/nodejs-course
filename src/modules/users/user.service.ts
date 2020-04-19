@@ -5,11 +5,13 @@ import { UserModel } from './user.model';
 import { Task } from '../task/task.interface';
 import { TaskService } from '../task/task.service';
 import { TASK_SERVICE_IDENTIFIER } from '../task/task.constants';
+import * as _ from 'lodash';
 
 @injectable()
 export class UserService {
   userRepository: UserRepository;
   taskService: TaskService;
+  static readonly EDITABLE_FIELDS = ['name', 'login', 'password'];
 
   constructor(
       @inject(USER_SERVICE_IDENTIFIER.USER_REPOSITORY) userRepository: UserRepository,
@@ -34,7 +36,7 @@ export class UserService {
   }
 
   updateUser(id: string, user: User): Promise<User> {
-    return this.userRepository.updateUser(id, user);
+    return this.userRepository.updateUser(id, _.pick(user, UserService.EDITABLE_FIELDS));
   }
 
   async deleteUser(id: string): Promise<any> {
