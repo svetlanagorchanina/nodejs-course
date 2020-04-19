@@ -28,14 +28,11 @@ export class UserMemoryRepository extends UserRepository {
     return new Promise(resolve => resolve(user));
   }
 
-  updateUser(userId: string, updatedUser: User): User {
-    const user = this.users.find(({ id }) => id === userId);
+  async updateUser(userId: string, updatedUserFields: User): Promise<User> {
+    const user = await this.getUser(userId);
+    const updatedUser = Object.assign(user, updatedUserFields);
 
-    if (!user) {
-      throw new NotFoundError('User not found');
-    }
-
-    return Object.assign(user, updatedUser);
+    return new Promise(resolve => resolve(updatedUser));
   }
 
   deleteUser(userId: string) {

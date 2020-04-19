@@ -33,7 +33,7 @@ export class UserService {
     return this.userRepository.addUser(newUser);
   }
 
-  updateUser(id: string, user: User): User {
+  updateUser(id: string, user: User): Promise<User> {
     return this.userRepository.updateUser(id, user);
   }
 

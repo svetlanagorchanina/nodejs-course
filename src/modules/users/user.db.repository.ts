@@ -29,8 +29,10 @@ export class UserDBRepository extends UserRepository {
     return newUser;
   }
 
-  updateUser(userId: string, updatedUser: User): User {
-    return null;
+  async updateUser(userId: string, updatedUser: User): Promise<User> {
+    await this.getUser(userId);
+
+    return UserModel.findByIdAndUpdate(userId, updatedUser, { useFindAndModify: false, new: true });
   }
 
   deleteUser(userId: string) {

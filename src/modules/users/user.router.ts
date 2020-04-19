@@ -32,7 +32,7 @@ router.route('/:id')
   .put(safeHandler.bind(null, async (req, res) => {
     const user: User = await userService.updateUser(req.params.id, req.body);
 
-    res.status(HttpStatus.OK).json(user);
+    res.status(HttpStatus.OK).json(UserModel.toResponse(user));
   }))
   .delete(safeHandler.bind(null, async (req, res) => {
     await userService.deleteUser(req.params.id);
