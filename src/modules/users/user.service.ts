@@ -23,7 +23,7 @@ export class UserService {
     return this.userRepository.getAll();
   }
 
-  getUser(id: string): User {
+  getUser(id: string): Promise<User> {
     return this.userRepository.getUser(id);
   }
 

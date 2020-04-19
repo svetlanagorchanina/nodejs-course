@@ -2,6 +2,7 @@ import { User, UserRepository } from './user.interface';
 import { injectable } from 'inversify';
 import { usersData } from '../../data';
 import { UserModel } from './user.model';
+import { NotFoundError } from '../../error';
 
 @injectable()
 export class UserDBRepository extends UserRepository {
@@ -11,8 +12,14 @@ export class UserDBRepository extends UserRepository {
     return UserModel.find();
   }
 
-  getUser(userId: string): User {
-    return null;
+  async getUser(id: string): Promise<User> {
+    const user = await UserModel.findById(id);
+
+    if (!user) {
+      throw new NotFoundError('User not found');
+    }
+
+    return user;
   }
 
   addUser(user: User): User {

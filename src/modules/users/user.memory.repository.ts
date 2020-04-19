@@ -12,14 +12,14 @@ export class UserMemoryRepository extends UserRepository {
     return new Promise(resolve => resolve(this.users));
   }
 
-  getUser(userId: string): User {
+  getUser(userId: string): Promise<User> {
     const user = this.users.find(({ id }) => id === userId);
 
     if (!user) {
       throw new NotFoundError('User not found');
     }
 
-    return user;
+    return new Promise(resolve => resolve(user));
   }
 
   addUser(user: User): User {
