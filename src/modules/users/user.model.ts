@@ -1,6 +1,7 @@
 import * as uuid from 'uuid';
 import { User } from './user.interface';
 import * as mongoose from 'mongoose';
+import * as _ from 'lodash';
 
 const userSchema = new mongoose.Schema({
   _id: {
@@ -24,9 +25,7 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.statics.toResponse = (user: User) => {
-  const { id, name, login } = user;
-
-  return { id, name, login };
+  return _.pick(user, ['id', 'name', 'login']);
 };
 
 export const UserModel = mongoose.model('User', userSchema);

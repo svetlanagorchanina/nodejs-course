@@ -1,5 +1,7 @@
 import * as uuid from 'uuid';
 import * as mongoose from 'mongoose';
+import { Board } from './board.interface';
+import * as _ from 'lodash';
 
 const boardSchema = new mongoose.Schema({
   _id: {
@@ -28,5 +30,14 @@ const boardSchema = new mongoose.Schema({
     },
   }],
 });
+
+boardSchema.statics.toResponse = (board: Board) => {
+  const columns = board.columns.map(column => _.pick(column, ['id', 'order', 'title']));
+
+  return {
+    ..._.pick(board, ['id', 'title']),
+    columns,
+  };
+};
 
 export const BoardModel = mongoose.model('Board', boardSchema);
