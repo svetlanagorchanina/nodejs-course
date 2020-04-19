@@ -12,6 +12,7 @@ export class LoggerService {
             transports: [
                 new winston.transports.File({ dirname: this.LOG_DIR, filename: this.INFO_LOG_FILE_NAME, level: 'info' }),
                 new winston.transports.File({ dirname: this.LOG_DIR, filename: this.ERROR_LOG_FILE_NAME, level: 'error' }),
+                new winston.transports.Console({ level: 'error' }),
             ],
         });
     }
