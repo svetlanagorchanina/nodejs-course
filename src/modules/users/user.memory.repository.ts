@@ -22,10 +22,10 @@ export class UserMemoryRepository extends UserRepository {
     return new Promise(resolve => resolve(user));
   }
 
-  addUser(user: User): User {
+  addUser(user: User): Promise<User> {
     this.users.push(user);
 
-    return user;
+    return new Promise(resolve => resolve(user));
   }
 
   updateUser(userId: string, updatedUser: User): User {

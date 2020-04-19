@@ -27,7 +27,7 @@ export class UserService {
     return this.userRepository.getUser(id);
   }
 
-  createUser(user: User): User {
+  createUser(user: User): Promise<User> {
     const newUser = new UserModel(user);
 
     return this.userRepository.addUser(newUser);

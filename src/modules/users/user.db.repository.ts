@@ -22,8 +22,11 @@ export class UserDBRepository extends UserRepository {
     return user;
   }
 
-  addUser(user: User): User {
-    return null;
+  async addUser(user: User): Promise<User> {
+    const newUser = new UserModel(user);
+    await newUser.save();
+
+    return newUser;
   }
 
   updateUser(userId: string, updatedUser: User): User {
