@@ -1,0 +1,47 @@
+import { Task, TaskRepository } from './task.interface';
+import { injectable } from 'inversify';
+import { NotFoundError } from '../../error';
+import { TaskModel } from './task.model';
+
+@injectable()
+export class TaskDBRepository extends TaskRepository {
+
+  getAll(boardId: string): Promise<Task[]> {
+    return TaskModel.findMany({ boardId });
+  }
+
+  getTask(boardId: string, taskId: string): Promise<Task> {
+    const task = TaskModel.findOne({ boardId, id: taskId });
+
+    if (!task) {
+      throw new NotFoundError('Task not found');
+    }
+
+    return task;
+  }
+
+  async addTask(boardId: string, task: Task): Promise<Task> {
+    const newTask = new TaskModel({ ...task, boardId });
+    await newTask.save();
+
+    return newTask;
+  }
+
+  async updateTask({ boardId, taskId, task }): Promise<Task> {
+    await this.getTask(boardId, taskId);
+    return TaskModel.findOneAndUpdate({ id: taskId, boardId }, task, { useFindAndModify: false, new: true });
+  }
+
+  updateUserTasks(userId: string, updatedTask): Promise<Task[]> {
+    return TaskModel.updateMany({ userId }, updatedTask, { useFindAndModify: false, new: true });
+  }
+
+  async deleteTask(boardId: string, taskId: string): Promise<any> {
+    await this.getTask(boardId, taskId);
+    return TaskModel.findByIdAndDelete(taskId);
+  }
+
+  deleteAllTasksByBoardId(boardId: string): Promise<any> {
+    return TaskModel.deleteMany({ boardId });
+  }
+}

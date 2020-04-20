@@ -2,31 +2,20 @@ import { Task, TaskRepository } from './task.interface';
 import { injectable } from 'inversify';
 import * as _ from 'lodash';
 import { NotFoundError } from '../../error';
-import { boardsData, tasksData } from '../../data';
-import { Board } from '../board/board.interface';
+import { tasksData } from '../../data';
+import { TaskModel } from './task.model';
 
 @injectable()
 export class TaskMemoryRepository extends TaskRepository {
   tasks: Task[] = tasksData;
-  boards: Board[] = boardsData;
-
-  private checkBoard(boardId: string) {
-    const board = this.boards.find(({ id }) => id === boardId);
-
-    if (!board) {
-      throw new NotFoundError('Board not found');
-    }
-  }
 
   getAll(boardId: string): Promise<Task[]> {
-    this.checkBoard(boardId);
     const tasks = this.tasks.filter(task => task.boardId === boardId);
 
     return new Promise(resolve => resolve(tasks));
   }
 
   getTask(boardId: string, taskId: string): Promise<Task> {
-    this.checkBoard(boardId);
     const task = this.tasks.find(task => task.id === taskId && task.boardId === boardId);
 
     if (!task) {
@@ -37,10 +26,10 @@ export class TaskMemoryRepository extends TaskRepository {
   }
 
   addTask(boardId: string, task: Task): Promise<Task> {
-    this.checkBoard(boardId);
-    this.tasks.push(task);
+    const newTask = new TaskModel({ ...task, boardId });
+    this.tasks.push(newTask);
 
-    return new Promise(resolve => resolve(task));
+    return new Promise(resolve => resolve(newTask));
   }
 
   async updateTask({ boardId, taskId, task }): Promise<Task> {
@@ -63,7 +52,6 @@ export class TaskMemoryRepository extends TaskRepository {
   }
 
   deleteTask(boardId: string, taskId: string): Promise<any> {
-    this.checkBoard(boardId);
     const removedTasks = _.remove(this.tasks, task => task.id === taskId && task.boardId === boardId);
 
     if (!removedTasks.length) {

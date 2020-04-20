@@ -1,33 +1,41 @@
 import { inject, injectable } from 'inversify';
 import { Task, TaskRepository } from './task.interface';
 import { TASK_SERVICE_IDENTIFIER } from './task.constants';
-import { TaskModel } from './task.model';
 import * as _ from 'lodash';
+import { BOARD_SERVICE_IDENTIFIER } from '../board/board.constants';
+import { BoardService } from '../board/board.service';
 
 @injectable()
 export class TaskService {
   taskRepository: TaskRepository;
+  boardService: BoardService;
   static readonly EDITABLE_FIELDS = ['title', 'order', 'description', 'userId', 'boardId', 'columnId'];
 
-  constructor(@inject(TASK_SERVICE_IDENTIFIER.TASK_REPOSITORY) taskRepository: TaskRepository) {
+  constructor(
+    @inject(TASK_SERVICE_IDENTIFIER.TASK_REPOSITORY) taskRepository: TaskRepository,
+    @inject(BOARD_SERVICE_IDENTIFIER.BOARD_SERVICE) boardService: BoardService,
+  ) {
     this.taskRepository = taskRepository;
+    this.boardService = boardService;
   }
 
-  getAll(boardId: string): Promise<Task[]> {
+  async getAll(boardId: string): Promise<Task[]> {
+    await this.boardService.getBoard(boardId);
     return this.taskRepository.getAll(boardId);
   }
 
-  getTask(boardId: string, taskId: string): Promise<Task> {
+  async getTask(boardId: string, taskId: string): Promise<Task> {
+    await this.boardService.getBoard(boardId);
     return this.taskRepository.getTask(boardId, taskId);
   }
 
-  createTask(boardId: string, task: Task = {} as Task): Promise<Task> {
-    const newTask = new TaskModel({ ...task, boardId });
-
-    return this.taskRepository.addTask(boardId, newTask);
+  async createTask(boardId: string, task: Task = {} as Task): Promise<Task> {
+    await this.boardService.getBoard(boardId);
+    return this.taskRepository.addTask(boardId, { ...task, boardId });
   }
 
-  updateTask({ boardId, taskId, task }): Promise<Task> {
+  async updateTask({ boardId, taskId, task }): Promise<Task> {
+    await this.boardService.getBoard(boardId);
     return this.taskRepository.updateTask({ boardId, taskId, task: _.pick(task, TaskService.EDITABLE_FIELDS) });
   }
 
@@ -35,7 +43,8 @@ export class TaskService {
     return this.taskRepository.updateUserTasks(userId, _.pick(task, TaskService.EDITABLE_FIELDS));
   }
 
-  deleteTask(boardId: string, taskId: string) {
+  async deleteTask(boardId: string, taskId: string) {
+    await this.boardService.getBoard(boardId);
     return this.taskRepository.deleteTask(boardId, taskId);
   }
 
