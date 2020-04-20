@@ -3,6 +3,7 @@ import { injectable } from 'inversify';
 import * as _ from 'lodash';
 import { NotFoundError } from '../../error';
 import { boardsData } from '../../data';
+import { BoardModel } from './board.model';
 
 @injectable()
 export class BoardMemoryRepository extends BoardRepository {
@@ -23,9 +24,10 @@ export class BoardMemoryRepository extends BoardRepository {
   }
 
   addBoard(board: Board): Promise<Board> {
-    this.boards.push(board);
+    const newBoard = new BoardModel(board);
+    this.boards.push(newBoard);
 
-    return new Promise(resolve => resolve(board));
+    return new Promise(resolve => resolve(newBoard));
   }
 
   async updateBoard(boardId: string, updatedBoardFields: Board): Promise<Board> {

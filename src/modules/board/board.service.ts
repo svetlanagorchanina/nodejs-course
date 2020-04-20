@@ -1,7 +1,6 @@
 import { inject, injectable } from 'inversify';
 import { Board, BoardRepository } from './board.interface';
 import { BOARD_SERVICE_IDENTIFIER } from './board.constants';
-import { BoardModel } from './board.model';
 import { TaskService } from "../task/task.service";
 import { TASK_SERVICE_IDENTIFIER } from "../task/task.constants";
 import * as _ from 'lodash';
@@ -27,9 +26,7 @@ export class BoardService {
   }
 
   createBoard(board: Board): Promise<Board> {
-    const newBoard = new BoardModel(board);
-
-    return this.boardRepository.addBoard(newBoard);
+    return this.boardRepository.addBoard(board);
   }
 
   updateBoard(id: string, board: Board): Promise<Board> {

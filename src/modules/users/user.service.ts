@@ -1,7 +1,6 @@
 import { inject, injectable } from 'inversify';
 import { User, UserRepository } from './user.interface';
 import { USER_SERVICE_IDENTIFIER } from './user.constants';
-import { UserModel } from './user.model';
 import { Task } from '../task/task.interface';
 import { TaskService } from '../task/task.service';
 import { TASK_SERVICE_IDENTIFIER } from '../task/task.constants';
@@ -30,9 +29,7 @@ export class UserService {
   }
 
   createUser(user: User): Promise<User> {
-    const newUser = new UserModel(user);
-
-    return this.userRepository.addUser(newUser);
+    return this.userRepository.addUser(user);
   }
 
   updateUser(id: string, user: User): Promise<User> {

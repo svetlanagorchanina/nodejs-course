@@ -3,6 +3,7 @@ import { injectable } from 'inversify';
 import * as _ from 'lodash';
 import { NotFoundError } from '../../error';
 import { usersData } from '../../data';
+import { UserModel } from './user.model';
 
 @injectable()
 export class UserMemoryRepository extends UserRepository {
@@ -23,9 +24,10 @@ export class UserMemoryRepository extends UserRepository {
   }
 
   addUser(user: User): Promise<User> {
-    this.users.push(user);
+    const newUser = new UserModel(user);
+    this.users.push(newUser);
 
-    return new Promise(resolve => resolve(user));
+    return new Promise(resolve => resolve(newUser));
   }
 
   async updateUser(userId: string, updatedUserFields: User): Promise<User> {
