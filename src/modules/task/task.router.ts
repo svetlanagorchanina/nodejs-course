@@ -1,15 +1,14 @@
 import { TaskService } from './task.service';
 import * as express from 'express';
 import * as HttpStatus from 'http-status-codes';
-import { TaskModule } from './task.module';
 import { TASK_SERVICE_IDENTIFIER } from './task.constants';
 import { safeHandler } from "../../decorators/safeHandler";
 import { Task } from "./task.interface";
 import { TaskModel } from './task.model';
+import { InjectorService } from '../../services/injectorService';
 
-TaskModule.init();
 const router = express.Router({ mergeParams: true });
-const taskService: TaskService = TaskModule.get<TaskService>(TASK_SERVICE_IDENTIFIER.TASK_SERVICE);
+const taskService: TaskService = InjectorService.get<TaskService>(TASK_SERVICE_IDENTIFIER.TASK_SERVICE);
 
 router.route('/')
   .get(safeHandler.bind(null, async (req, res) => {

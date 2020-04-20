@@ -1,15 +1,14 @@
 import { BoardService } from './board.service';
 import * as express from 'express';
 import * as HttpStatus from 'http-status-codes';
-import { BoardModule } from './board.module';
 import { BOARD_SERVICE_IDENTIFIER } from './board.constants';
 import { safeHandler } from "../../decorators/safeHandler";
 import { Board } from "./board.interface";
 import { BoardModel } from './board.model';
+import { InjectorService } from '../../services/injectorService';
 
-BoardModule.init();
 const router = express.Router();
-const boardService: BoardService = BoardModule.get<BoardService>(BOARD_SERVICE_IDENTIFIER.BOARD_SERVICE);
+const boardService: BoardService = InjectorService.get<BoardService>(BOARD_SERVICE_IDENTIFIER.BOARD_SERVICE);
 
 router.route('/')
   .get(safeHandler.bind(null, async (req, res) => {

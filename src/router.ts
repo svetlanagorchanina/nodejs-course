@@ -3,10 +3,13 @@ import * as swaggerUI from 'swagger-ui-express';
 import * as path from 'path';
 import * as YAML from 'yamljs';
 import { NotFoundError } from './error';
+import { InjectorService } from './services/injectorService';
 
 export const router = express.Router();
 
 const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
+
+InjectorService.init();
 
 router.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 router.use('/users', require('./modules/users/user.router'));

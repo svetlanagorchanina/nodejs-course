@@ -2,14 +2,13 @@ import { UserService } from './user.service';
 import * as express from 'express';
 import { UserModel } from './user.model';
 import * as HttpStatus from 'http-status-codes';
-import { UserModule } from './user.module';
 import { USER_SERVICE_IDENTIFIER } from './user.constants';
 import { safeHandler } from "../../decorators/safeHandler";
 import { User } from "./user.interface";
+import { InjectorService } from '../../services/injectorService';
 
-UserModule.init();
 const router = express.Router();
-const userService: UserService = UserModule.get<UserService>(USER_SERVICE_IDENTIFIER.USER_SERVICE);
+const userService: UserService = InjectorService.get<UserService>(USER_SERVICE_IDENTIFIER.USER_SERVICE);
 
 router.route('/')
   .get(safeHandler.bind(null, async (req, res) => {
