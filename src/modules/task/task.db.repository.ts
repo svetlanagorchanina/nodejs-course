@@ -7,11 +7,11 @@ import { TaskModel } from './task.model';
 export class TaskDBRepository extends TaskRepository {
 
   getAll(boardId: string): Promise<Task[]> {
-    return TaskModel.findMany({ boardId });
+    return TaskModel.find({ boardId });
   }
 
-  getTask(boardId: string, taskId: string): Promise<Task> {
-    const task = TaskModel.findOne({ boardId, id: taskId });
+  async getTask(boardId: string, taskId: string): Promise<Task> {
+    const task = await TaskModel.findOne({ boardId, _id: taskId });
 
     if (!task) {
       throw new NotFoundError('Task not found');
@@ -29,7 +29,7 @@ export class TaskDBRepository extends TaskRepository {
 
   async updateTask({ boardId, taskId, task }): Promise<Task> {
     await this.getTask(boardId, taskId);
-    return TaskModel.findOneAndUpdate({ id: taskId, boardId }, task, { useFindAndModify: false, new: true });
+    return TaskModel.findOneAndUpdate({ _id: taskId, boardId }, task, { useFindAndModify: false, new: true });
   }
 
   updateUserTasks(userId: string, updatedTask): Promise<Task[]> {

@@ -5,19 +5,17 @@ import { BoardModel } from './board.model';
 import { TaskService } from "../task/task.service";
 import { TASK_SERVICE_IDENTIFIER } from "../task/task.constants";
 import * as _ from 'lodash';
+import { InjectorService } from '../../services/injectorService';
 
 @injectable()
 export class BoardService {
   boardRepository: BoardRepository;
-  taskService: TaskService;
   static readonly EDITABLE_FIELDS = ['columns', 'title'];
 
   constructor(
       @inject(BOARD_SERVICE_IDENTIFIER.BOARD_REPOSITORY) boardRepository: BoardRepository,
-      @inject(TASK_SERVICE_IDENTIFIER.TASK_SERVICE) taskService: TaskService,
   ) {
     this.boardRepository = boardRepository;
-    this.taskService = taskService;
   }
 
   getAll(): Promise<Board[]> {
@@ -39,8 +37,9 @@ export class BoardService {
   }
 
   async deleteBoard(id: string): Promise<any> {
-    // TODO: add cascade deletion
+    const taskService: TaskService = InjectorService.get<TaskService>(TASK_SERVICE_IDENTIFIER.TASK_SERVICE);
+
     await this.boardRepository.deleteBoard(id);
-    await this.taskService.deleteAllTasksByBoardId(id);
+    await taskService.deleteAllTasksByBoardId(id);
   }
 }
