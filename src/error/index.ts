@@ -19,3 +19,12 @@ export class NotFoundError extends BaseError {
     super(message, errorCode);
   }
 }
+
+export class ValidationError extends BaseError {
+  constructor(
+    message = HttpStatus.getStatusText(HttpStatus.BAD_REQUEST),
+    errorCode = HttpStatus.BAD_REQUEST
+  ) {
+    super(message, errorCode);
+  }
+}
