@@ -2,6 +2,7 @@ import * as uuid from 'uuid';
 import * as mongoose from 'mongoose';
 import { Board } from './board.interface';
 import * as _ from 'lodash';
+import { ColumnModel, columnSchema } from '../column/column.model';
 
 const boardSchema = new mongoose.Schema({
   _id: {
@@ -13,28 +14,12 @@ const boardSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  columns: [{
-    id: {
-      type: String,
-      default: uuid,
-    },
-    order: {
-      type: Number,
-      required: true,
-      min: 0,
-    },
-    title: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-  }],
+  columns: [columnSchema],
 });
 const BOARD_RESPONSE_FIELDS = ['id', 'title', 'columns'];
-const COLUMN_RESPONSE_FIELDS = ['id', 'order', 'title'];
 
 boardSchema.statics.toResponse = (board: Board) => {
-  const columns = board.columns.map(column => _.pick(column, COLUMN_RESPONSE_FIELDS));
+  const columns = board.columns.map(ColumnModel.toResponse);
 
   return {
     ..._.pick(board, BOARD_RESPONSE_FIELDS),
