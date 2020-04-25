@@ -19,11 +19,8 @@ export class UserDBRepository extends UserRepository {
     return user;
   }
 
-  async addUser(user: User): Promise<User> {
-    const newUser = new UserModel(user);
-    await newUser.save();
-
-    return newUser;
+  addUser(user: User): Promise<User> {
+    return UserModel.create(user);
   }
 
   async updateUser(userId: string, updatedUser: User): Promise<User> {

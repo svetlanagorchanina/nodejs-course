@@ -20,11 +20,8 @@ export class TaskDBRepository extends TaskRepository {
     return task;
   }
 
-  async addTask(boardId: string, task: Task): Promise<Task> {
-    const newTask = new TaskModel({ ...task, boardId });
-    await newTask.save();
-
-    return newTask;
+  addTask(boardId: string, task: Task): Promise<Task> {
+    return TaskModel.create({ ...task, boardId });
   }
 
   async updateTask({ boardId, taskId, task }): Promise<Task> {

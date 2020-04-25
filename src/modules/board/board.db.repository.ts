@@ -19,11 +19,8 @@ export class BoardDBRepository extends BoardRepository {
     return board;
   }
 
-  async addBoard(board: Board): Promise<Board> {
-    const newBoard = new BoardModel(board);
-    await newBoard.save();
-
-    return newBoard;
+  addBoard(board: Board): Promise<Board> {
+    return BoardModel.create(board);
   }
 
   async updateBoard(boardId: string, updatedBoard: Board): Promise<Board> {
