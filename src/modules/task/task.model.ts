@@ -32,7 +32,7 @@ const taskSchema = new mongoose.Schema({
     ref: 'Board',
   },
   columnId: {
-    type: mongoose.Schema.ObjectId,
+    type: String,
     ref: 'Column',
     default: null,
   },

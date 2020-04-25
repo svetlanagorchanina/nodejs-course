@@ -26,7 +26,7 @@ export class BoardDBRepository extends BoardRepository {
   async updateBoard(boardId: string, updatedBoard: Board): Promise<Board> {
     await this.getBoard(boardId);
 
-    return BoardModel.findByIdAndUpdate(boardId, updatedBoard, { useFindAndModify: false, new: true });
+    return BoardModel.findByIdAndUpdate(boardId, updatedBoard, { useFindAndModify: false, new: true, runValidators: true });
   }
 
   async deleteBoard(boardId: string): Promise<any> {

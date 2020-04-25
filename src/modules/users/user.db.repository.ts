@@ -26,7 +26,7 @@ export class UserDBRepository extends UserRepository {
   async updateUser(userId: string, updatedUser: User): Promise<User> {
     await this.getUser(userId);
 
-    return UserModel.findByIdAndUpdate(userId, updatedUser, { useFindAndModify: false, new: true });
+    return UserModel.findByIdAndUpdate(userId, updatedUser, { useFindAndModify: false, new: true, runValidators: true });
   }
 
   async deleteUser(userId: string): Promise<any> {

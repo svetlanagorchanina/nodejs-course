@@ -26,11 +26,11 @@ export class TaskDBRepository extends TaskRepository {
 
   async updateTask({ boardId, taskId, task }): Promise<Task> {
     await this.getTask(boardId, taskId);
-    return TaskModel.findOneAndUpdate({ _id: taskId, boardId }, task, { useFindAndModify: false, new: true });
+    return TaskModel.findOneAndUpdate({ _id: taskId, boardId }, task, { useFindAndModify: false, new: true, runValidators: true });
   }
 
   updateUserTasks(userId: string, updatedTask): Promise<Task[]> {
-    return TaskModel.updateMany({ userId }, updatedTask, { useFindAndModify: false, new: true });
+    return TaskModel.updateMany({ userId }, updatedTask, { useFindAndModify: false, new: true, runValidators: true });
   }
 
   async deleteTask(boardId: string, taskId: string): Promise<any> {
