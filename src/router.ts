@@ -12,6 +12,7 @@ const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
 InjectorService.init();
 
 router.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+router.use('/login', require('./modules/login/login.router'));
 router.use('/users', require('./modules/users/user.router'));
 router.use('/boards', require('./modules/board/board.router'));
 router.use('/boards/:boardId/tasks', require('./modules/task/task.router'));

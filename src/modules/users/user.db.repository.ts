@@ -1,7 +1,8 @@
 import { User, UserRepository } from './user.interface';
 import { injectable } from 'inversify';
 import { UserModel } from './user.model';
-import { NotFoundError } from '../../error';
+import { NotFoundError, ValidationError } from '../../error';
+import { MONGOOSE_ERROR_CODE } from '../../error/mongoose-error.constants';
 
 @injectable()
 export class UserDBRepository extends UserRepository {
@@ -19,8 +20,16 @@ export class UserDBRepository extends UserRepository {
     return user;
   }
 
-  addUser(user: User): Promise<User> {
-    return UserModel.create(user);
+  async addUser(user: User): Promise<User> {
+    try {
+      return await UserModel.create(user);
+    } catch(error) {
+      if (error.code === MONGOOSE_ERROR_CODE.DUPLICATED) {
+        throw new ValidationError('Login should be unique');
+      }
+
+      throw error;
+    }
   }
 
   async updateUser(userId: string, updatedUser: User): Promise<User> {

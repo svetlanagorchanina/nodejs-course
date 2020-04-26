@@ -18,6 +18,9 @@ import { UserService } from '../modules/users/user.service';
 import { UserDBRepository } from '../modules/users/user.db.repository';
 import { UserMemoryRepository } from '../modules/users/user.memory.repository';
 import { USER_SERVICE_IDENTIFIER } from '../modules/users/user.constants';
+import { AuthService } from './authService';
+
+import { SERVICE_IDENTIFIER } from './services.constants';
 
 export class InjectorService {
   static container: Container;
@@ -34,6 +37,7 @@ export class InjectorService {
     InjectorService.container.bind<TaskService>(TASK_SERVICE_IDENTIFIER.TASK_SERVICE).to(TaskService);
     InjectorService.container.bind<BoardRepository>(BOARD_SERVICE_IDENTIFIER.BOARD_REPOSITORY).to(boardRepository);
     InjectorService.container.bind<BoardService>(BOARD_SERVICE_IDENTIFIER.BOARD_SERVICE).to(BoardService);
+    InjectorService.container.bind<AuthService>(SERVICE_IDENTIFIER.AUTH_SERVICE).to(AuthService);
   }
 
   static get<T>(serviceType) {
