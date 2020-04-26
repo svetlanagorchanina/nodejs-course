@@ -17,6 +17,6 @@ export abstract class TaskRepository {
     public abstract addTask(boardId, task: Task): Promise<Task>;
     public abstract updateTask({ boardId, taskId, task }: { boardId: string, taskId: string, task: Task }): Promise<Task>;
     public abstract updateUserTasks(userId: string, task: Task): Promise<Task[]>;
-    public abstract deleteTask(boardId: string, taskId: string): Promise<any>;
-    public abstract deleteAllTasksByBoardId(boardId: string): Promise<any>;
+    public abstract deleteTask(boardId: string, taskId: string): Promise<boolean>;
+    public abstract deleteAllTasksByBoardId(boardId: string): Promise<boolean>;
 }

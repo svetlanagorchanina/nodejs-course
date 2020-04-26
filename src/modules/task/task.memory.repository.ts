@@ -9,37 +9,34 @@ import { TaskModel } from './task.model';
 export class TaskMemoryRepository extends TaskRepository {
   tasks: Task[] = tasksData;
 
-  getAll(boardId: string): Promise<Task[]> {
-    const tasks = this.tasks.filter(task => task.boardId === boardId);
-
-    return new Promise(resolve => resolve(tasks));
+  async getAll(boardId: string): Promise<Task[]> {
+    return this.tasks.filter(task => task.boardId === boardId);
   }
 
-  getTask(boardId: string, taskId: string): Promise<Task> {
+  async getTask(boardId: string, taskId: string): Promise<Task> {
     const task = this.tasks.find(task => task.id === taskId && task.boardId === boardId);
 
     if (!task) {
       throw new NotFoundError('Task not found');
     }
 
-    return new Promise(resolve => resolve(task));
+    return task;
   }
 
-  addTask(boardId: string, task: Task): Promise<Task> {
+  async addTask(boardId: string, task: Task): Promise<Task> {
     const newTask = new TaskModel({ ...task, boardId });
     this.tasks.push(newTask);
 
-    return new Promise(resolve => resolve(newTask));
+    return newTask;
   }
 
   async updateTask({ boardId, taskId, task }): Promise<Task> {
     const currentTask = await this.getTask(boardId, taskId);
-    const updatedTask = Object.assign(currentTask, task);
 
-    return new Promise(resolve => resolve(updatedTask));
+    return Object.assign(currentTask, task);
   }
 
-  updateUserTasks(userId: string, updatedTask): Promise<Task[]> {
+  async updateUserTasks(userId: string, updatedTask): Promise<Task[]> {
     const tasks = this.tasks.map(task => {
       if (task.userId === userId) {
         Object.assign(task, updatedTask);
@@ -48,22 +45,22 @@ export class TaskMemoryRepository extends TaskRepository {
       return task;
     });
 
-    return new Promise(resolve => resolve(tasks));
+    return tasks;
   }
 
-  deleteTask(boardId: string, taskId: string): Promise<any> {
+  async deleteTask(boardId: string, taskId: string): Promise<boolean> {
     const removedTasks = _.remove(this.tasks, task => task.id === taskId && task.boardId === boardId);
 
     if (!removedTasks.length) {
       throw new NotFoundError('Task not found');
     }
 
-    return new Promise(resolve => resolve(true));
+    return true;
   }
 
-  deleteAllTasksByBoardId(boardId: string): Promise<any> {
+  async deleteAllTasksByBoardId(boardId: string): Promise<boolean> {
     _.remove(this.tasks, task => task.boardId === boardId);
 
-    return new Promise(resolve => resolve(true));
+    return true;
   }
 }
