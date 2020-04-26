@@ -5,13 +5,18 @@ import { injectable } from 'inversify';
 
 const SALT_LENGTH = 8;
 
+export interface TokenPayload {
+  userId: string;
+  login: string;
+}
+
 @injectable()
 export class AuthService {
-  decodeToken(token: string): Promise<Object> {
+  decodeToken(token: string): Promise<TokenPayload> {
     return jwt.verify(token, config.JWT_SECRET_KEY);
   }
 
-  generateToken(payload): Promise<string> {
+  generateToken(payload: TokenPayload): Promise<string> {
     return jwt.sign(payload, config.JWT_SECRET_KEY);
   }
 

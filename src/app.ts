@@ -1,12 +1,14 @@
 import 'reflect-metadata';
+import { InjectorService } from './services/injectorService';
 import * as express from 'express';
-import { router } from './router';
 import { responseLogger } from "./middlewares/responseLogger";
 import { errorHandler } from "./middlewares/errorHandler";
+
+InjectorService.init();
 
 export const app = express();
 
 app.use(express.json());
 app.use(responseLogger);
-app.use('/', router);
+app.use('/', require('./router'));
 app.use(errorHandler);

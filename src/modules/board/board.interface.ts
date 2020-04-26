@@ -2,7 +2,7 @@ import { injectable } from 'inversify';
 import { Column } from '../column/column.interface';
 
 export interface Board {
-    id: string;
+    id?: string;
     title: string;
     columns: Column[];
 }

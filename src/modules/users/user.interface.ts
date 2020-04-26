@@ -1,7 +1,7 @@
 import { injectable } from 'inversify';
 
 export interface User {
-    id: string;
+    id?: string;
     name: string;
     login: string;
     password: string;
