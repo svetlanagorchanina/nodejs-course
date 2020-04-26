@@ -39,7 +39,9 @@ const taskSchema = new mongoose.Schema({
 });
 const TASK_RESPONSE_FIELDS = ['id', 'title', 'order', 'description', 'userId', 'boardId', 'columnId'];
 
-taskSchema.statics.toResponse = (task: Task) => {
+taskSchema.methods.toJSON = function() {
+  const task: Task = this;
+
   return _.pick(task, TASK_RESPONSE_FIELDS);
 };
 

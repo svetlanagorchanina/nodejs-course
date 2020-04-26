@@ -18,7 +18,8 @@ const boardSchema = new mongoose.Schema({
 });
 const BOARD_RESPONSE_FIELDS = ['id', 'title', 'columns'];
 
-boardSchema.statics.toResponse = (board: Board) => {
+boardSchema.methods.toJSON = function() {
+  const board: Board = this;
   const columns = board.columns.map(ColumnModel.toResponse);
 
   return {

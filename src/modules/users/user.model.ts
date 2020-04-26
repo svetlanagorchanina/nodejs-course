@@ -30,7 +30,9 @@ const userSchema = new mongoose.Schema({
 });
 const USER_RESPONSE_FIELDS = ['id', 'name', 'login'];
 
-userSchema.statics.toResponse = (user: User) => {
+userSchema.methods.toJSON = function() {
+  const user: User = this;
+
   return _.pick(user, USER_RESPONSE_FIELDS);
 };
 

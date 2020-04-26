@@ -1,6 +1,5 @@
 import { UserService } from './user.service';
 import * as express from 'express';
-import { UserModel } from './user.model';
 import * as HttpStatus from 'http-status-codes';
 import { USER_SERVICE_IDENTIFIER } from './user.constants';
 import { safeHandler } from "../../decorators/safeHandler";
@@ -14,24 +13,24 @@ router.route('/')
   .get(safeHandler.bind(null, async (req, res) => {
     const users: User[] = await userService.getAll();
 
-    res.status(HttpStatus.OK).json(users.map(UserModel.toResponse));
+    res.status(HttpStatus.OK).json(users);
   }))
   .post(safeHandler.bind(null, async (req, res) => {
     const user: User = await userService.createUser(req.body);
 
-    res.status(HttpStatus.OK).json(UserModel.toResponse(user));
+    res.status(HttpStatus.OK).json(user);
   }));
 
 router.route('/:id')
   .get(safeHandler.bind(null, async (req, res) => {
     const user: User = await userService.getUser(req.params.id);
 
-    res.status(HttpStatus.OK).json(UserModel.toResponse(user));
+    res.status(HttpStatus.OK).json(user);
   }))
   .put(safeHandler.bind(null, async (req, res) => {
     const user: User = await userService.updateUser(req.params.id, req.body);
 
-    res.status(HttpStatus.OK).json(UserModel.toResponse(user));
+    res.status(HttpStatus.OK).json(user);
   }))
   .delete(safeHandler.bind(null, async (req, res) => {
     await userService.deleteUser(req.params.id);
