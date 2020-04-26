@@ -1,6 +1,8 @@
 import * as winston from "winston";
 import { withDate } from '../decorators/withDate';
+import { injectable } from 'inversify';
 
+@injectable()
 export class LoggerService {
     private logger;
     private readonly LOG_DIR = 'log';

@@ -4,6 +4,7 @@ import { config } from '../common/config';
 import { injectable } from 'inversify';
 
 const SALT_LENGTH = 8;
+const TOKEN_EXPIRATION = '1d';
 
 export interface TokenPayload {
   userId: string;
@@ -17,7 +18,7 @@ export class AuthService {
   }
 
   generateToken(payload: TokenPayload): Promise<string> {
-    return jwt.sign(payload, config.JWT_SECRET_KEY);
+    return jwt.sign(payload, config.JWT_SECRET_KEY, { expiresIn: TOKEN_EXPIRATION });
   }
 
   hashPassword(password: string): Promise<string> {

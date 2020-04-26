@@ -21,6 +21,7 @@ import { USER_SERVICE_IDENTIFIER } from '../modules/users/user.constants';
 import { AuthService } from './authService';
 
 import { SERVICE_IDENTIFIER } from './services.constants';
+import { LoggerService } from './loggerService';
 
 export class InjectorService {
   static container: Container;
@@ -38,6 +39,7 @@ export class InjectorService {
     InjectorService.container.bind<BoardRepository>(BOARD_SERVICE_IDENTIFIER.BOARD_REPOSITORY).to(boardRepository);
     InjectorService.container.bind<BoardService>(BOARD_SERVICE_IDENTIFIER.BOARD_SERVICE).to(BoardService);
     InjectorService.container.bind<AuthService>(SERVICE_IDENTIFIER.AUTH_SERVICE).to(AuthService);
+    InjectorService.container.bind<LoggerService>(SERVICE_IDENTIFIER.LOGGER_SERVICE).to(LoggerService);
   }
 
   static get<T>(serviceType) {

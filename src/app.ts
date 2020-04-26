@@ -1,10 +1,11 @@
 import 'reflect-metadata';
 import { InjectorService } from './services/injectorService';
 import * as express from 'express';
-import { responseLogger } from "./middlewares/responseLogger";
-import { errorHandler } from "./middlewares/errorHandler";
 
 InjectorService.init();
+
+import { responseLogger } from "./middlewares/responseLogger";
+import { errorHandler } from "./middlewares/errorHandler";
 
 export const app = express();
 

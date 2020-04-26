@@ -2,10 +2,12 @@ import { BaseError, ValidationError } from '../error';
 import * as HttpStatus from "http-status-codes";
 import { LoggerService } from '../services/loggerService';
 import * as mongoose from 'mongoose';
+import { InjectorService } from '../services/injectorService';
+import { SERVICE_IDENTIFIER } from '../services/services.constants';
+
+const logger: LoggerService = InjectorService.get<LoggerService>(SERVICE_IDENTIFIER.LOGGER_SERVICE);
 
 export function errorHandler(err, req, res, next) {
-    const logger = new LoggerService();
-
     if (err instanceof BaseError) {
         sendErrorResponse(res, logger, err);
 

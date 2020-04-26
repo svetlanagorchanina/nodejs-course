@@ -6,8 +6,9 @@ import { UserService } from './modules/users/user.service';
 import { InjectorService } from './services/injectorService';
 import { USER_SERVICE_IDENTIFIER } from './modules/users/user.constants';
 import * as mongoose from 'mongoose';
+import { SERVICE_IDENTIFIER } from './services/services.constants';
 
-const logger = new LoggerService();
+const logger: LoggerService = InjectorService.get<LoggerService>(SERVICE_IDENTIFIER.LOGGER_SERVICE);
 process.on('uncaughtException', error => logger.logError(error));
 process.on('unhandledRejection', error => logger.logError(error));
 
