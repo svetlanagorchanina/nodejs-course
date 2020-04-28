@@ -7,10 +7,17 @@ import { USER_SERVICE_IDENTIFIER } from '../modules/users/user.constants';
 
 const authService: AuthService = InjectorService.get<AuthService>(SERVICE_IDENTIFIER.AUTH_SERVICE);
 const userService: UserService = InjectorService.get<UserService>(USER_SERVICE_IDENTIFIER.USER_SERVICE);
+const AUTHORIZATION_TOKEN_TYPES = ['Bearer'];
 
 export async function authorize(req, res, next) {
   try {
-    const token = req.header('Authorization').replace('Bearer ', '');
+    const [type, token] = req.header.authorization.split(' ');
+
+    if (!AUTHORIZATION_TOKEN_TYPES.includes(type)) {
+      next(new LoginFailError());
+      return;
+    }
+
     const decoded: TokenPayload = await authService.decodeToken(token);
     await userService.getUser(decoded.userId);
 
