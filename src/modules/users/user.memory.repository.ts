@@ -13,8 +13,8 @@ export class UserMemoryRepository extends UserRepository {
     return this.users;
   }
 
-  async getUser(userId: string): Promise<User> {
-    const user = this.users.find(({ id }) => id === userId);
+  async getUserByParam(label: string, value: any): Promise<User> {
+    const user = this.users.find(user => user[label] === value);
 
     if (!user) {
       throw new NotFoundError('User not found');
@@ -31,7 +31,7 @@ export class UserMemoryRepository extends UserRepository {
   }
 
   async updateUser(userId: string, updatedUserFields: User): Promise<User> {
-    const user = await this.getUser(userId);
+    const user = await this.getUserByParam('_id', userId);
 
     return Object.assign(user, updatedUserFields);
   }

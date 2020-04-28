@@ -2,7 +2,6 @@ import * as uuid from 'uuid';
 import { User } from './user.interface';
 import * as mongoose from 'mongoose';
 import * as _ from 'lodash';
-import { LoginFailError } from '../../error';
 import { AuthService } from '../../services/authService';
 import { SERVICE_IDENTIFIER } from '../../services/services.constants';
 import { InjectorService } from '../../services/injectorService';
@@ -34,18 +33,6 @@ userSchema.methods.toJSON = function() {
   const user: User = this;
 
   return _.pick(user, USER_RESPONSE_FIELDS);
-};
-
-userSchema.statics.findByCredentials = async (login: string, password: string): Promise<User> => {
-  const authService: AuthService = InjectorService.get<AuthService>(SERVICE_IDENTIFIER.AUTH_SERVICE);
-  const user = await UserModel.findOne({ login });
-  const isMatch = _.get(user, 'password') && await authService.comparePasswords(password, user.password);
-
-  if (!user || !isMatch) {
-    throw new LoginFailError();
-  }
-
-  return user;
 };
 
 userSchema.pre('save', async function (next) {

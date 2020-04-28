@@ -23,7 +23,7 @@ router.route('/')
 
 router.route('/:id')
   .get(safeHandler.bind(null, async (req, res) => {
-    const user: User = await userService.getUser(req.params.id);
+    const user: User = await userService.getUserById(req.params.id);
 
     res.status(HttpStatus.OK).json(user);
   }))

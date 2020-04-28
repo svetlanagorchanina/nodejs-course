@@ -10,8 +10,8 @@ export class UserDBRepository extends UserRepository {
     return UserModel.find();
   }
 
-  async getUser(id: string): Promise<User> {
-    const user = await UserModel.findById(id);
+  async getUserByParam(label: string, value: any): Promise<User> {
+    const user = await UserModel.findOne({ [label]: value });
 
     if (!user) {
       throw new NotFoundError('User not found');
@@ -33,13 +33,13 @@ export class UserDBRepository extends UserRepository {
   }
 
   async updateUser(userId: string, updatedUser: User): Promise<User> {
-    await this.getUser(userId);
+    await this.getUserByParam('_id', userId);
 
     return UserModel.findByIdAndUpdate(userId, updatedUser, { useFindAndModify: false, new: true, runValidators: true });
   }
 
   async deleteUser(userId: string): Promise<any> {
-    await this.getUser(userId);
+    await this.getUserByParam('_id', userId);
 
     return UserModel.findByIdAndDelete(userId);
   }

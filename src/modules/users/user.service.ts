@@ -24,8 +24,12 @@ export class UserService {
     return this.userRepository.getAll();
   }
 
-  getUser(id: string): Promise<User> {
-    return this.userRepository.getUser(id);
+  getUserById(id: string): Promise<User> {
+    return this.userRepository.getUserByParam('_id', id);
+  }
+
+  getUserByLogin(login: string): Promise<User> {
+    return this.userRepository.getUserByParam('login', login);
   }
 
   createUser(user: User): Promise<User> {

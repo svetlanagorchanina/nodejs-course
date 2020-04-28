@@ -11,7 +11,7 @@ const AUTHORIZATION_TOKEN_TYPES = ['Bearer'];
 
 export async function authorize(req, res, next) {
   try {
-    const [type, token] = req.header.authorization.split(' ');
+    const [type, token] = req.headers.authorization.split(' ');
 
     if (!AUTHORIZATION_TOKEN_TYPES.includes(type)) {
       next(new LoginFailError());
@@ -19,7 +19,7 @@ export async function authorize(req, res, next) {
     }
 
     const decoded: TokenPayload = await authService.decodeToken(token);
-    await userService.getUser(decoded.userId);
+    await userService.getUserById(decoded.userId);
 
     next();
   } catch (error) {
