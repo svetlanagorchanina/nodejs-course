@@ -35,15 +35,13 @@ userSchema.methods.toJSON = function() {
   return _.pick(user, USER_RESPONSE_FIELDS);
 };
 
-userSchema.pre('save', async function (next) {
+userSchema.pre('save', async function () {
   const user = this;
   const authService: AuthService = InjectorService.get<AuthService>(SERVICE_IDENTIFIER.AUTH_SERVICE);
 
   if (user.isModified('password')) {
     user.password = await authService.hashPassword(user.password);
   }
-
-  next();
 });
 
 export const UserModel = mongoose.model('User', userSchema);
