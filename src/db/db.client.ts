@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import { config } from '../common/config';
+import { config } from '../config/config';
 
 export function connectToDB(): Promise<any> {
   return new Promise((resolve, reject) => {

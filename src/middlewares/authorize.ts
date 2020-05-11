@@ -1,13 +1,13 @@
-import { AuthService, TokenPayload } from '../services/authService';
-import { InjectorService } from '../services/injectorService';
-import { SERVICE_IDENTIFIER } from '../services/services.constants';
+import { AuthService } from '../services/auth/authService';
+import { InjectorService } from '../services/injector/injectorService';
 import { ForbiddenError, LoginFailError, NotFoundError } from '../error';
-import { UserService } from '../modules/users/user.service';
-import { USER_SERVICE_IDENTIFIER } from '../modules/users/user.constants';
+import { UserService } from '../services/user/user.service';
 import { HTTP_METHOD } from "../constants/request";
+import { SERVICE_IDENTIFIER, USER_IDENTIFIER } from '../services/injector/injectorService.constants';
+import { TokenPayload } from '../services/auth/authService.interface';
 
 const authService: AuthService = InjectorService.get<AuthService>(SERVICE_IDENTIFIER.AUTH_SERVICE);
-const userService: UserService = InjectorService.get<UserService>(USER_SERVICE_IDENTIFIER.USER_SERVICE);
+const userService: UserService = InjectorService.get<UserService>(USER_IDENTIFIER.USER_SERVICE);
 const AUTHORIZATION_TOKEN_TYPES = ['Bearer'];
 const NOT_AUTH_API_ENDPOINTS: { routeRegexp: RegExp, method?: HTTP_METHOD }[] = [
     { routeRegexp: /^\/doc/ },

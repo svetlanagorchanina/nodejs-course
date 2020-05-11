@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { InjectorService } from './services/injectorService';
+import { InjectorService } from './services/injector/injectorService';
 import * as express from 'express';
 
 InjectorService.init();
@@ -11,5 +11,5 @@ export const app = express();
 
 app.use(express.json());
 app.use(responseLogger);
-app.use('/', require('./router'));
+app.use('/', require('./routers'));
 app.use(errorHandler);
