@@ -28,3 +28,21 @@ export class ValidationError extends BaseError {
     super(message, errorCode);
   }
 }
+
+export class LoginFailError extends BaseError {
+  constructor(
+    message = HttpStatus.getStatusText(HttpStatus.UNAUTHORIZED),
+    errorCode = HttpStatus.UNAUTHORIZED
+  ) {
+    super(message, errorCode);
+  }
+}
+
+export class ForbiddenError extends BaseError {
+  constructor(
+    message = HttpStatus.getStatusText(HttpStatus.FORBIDDEN),
+    errorCode = HttpStatus.FORBIDDEN
+  ) {
+    super(message, errorCode);
+  }
+}
